@@ -1,0 +1,45 @@
+[
+
+    {
+        "name" : "Malapa",
+        "price" : "5500",
+        "currency" : "Tsh",
+        "unit" : 1,
+        "id":1
+    },
+    {
+        "name" : "Ndoo",
+        "price" : "4000",
+        "currency" : "Tsh",
+        "unit" : 1,
+         "id":2
+    },
+    {
+        "name" : "Kiwi",
+        "price" : "2500",
+        "currency" : "Tsh",
+        "unit" : 1,
+         "id":3
+    },
+    {
+        "name" : "Colgate Tooth Paste",
+        "price" : "3500",
+        "currency" : "Tsh",
+        "unit" : 1,
+         "id":4
+    },
+    {
+        "name" : "Doffi",
+        "price" : "1500",
+        "currency" : "Tsh",
+        "unit" : 1,
+         "id":5
+    },
+    {
+        "name" : "Barafu",
+        "price" : "100",
+        "currency" : "Tsh",
+        "unit" : 1,
+         "id":6
+    }
+]

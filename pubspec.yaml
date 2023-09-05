@@ -1,0 +1,75 @@
+name: erisiti
+description: A new Flutter project.
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.6 <4.0.0"
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.2
+  flutter_bloc: ^8.1.3
+  flutter_svg: ^2.0.7
+  google_fonts: ^5.1.0
+  fluttertoast: ^8.2.2
+  path_provider: ^2.0.11
+  simple_animations: ^4.0.0
+
+  intl: ^0.18.0
+  sqflite: ^2.3.0
+  path: ^1.8.3
+  http: ^1.1.0
+  supercharged: ^2.1.1
+  fl_chart: ^0.63.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.0
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/undraw_mobile_search_jxq5.svg
+    - assets/images/undraw_memory_storage_reh0.svg
+    - assets/images/undraw_pie_graph_re_fvol.svg
+    - assets/images/undraw_questions_re_1fy7.svg
+    - assets/images/undraw_receipt_re_fre3.svg
+    - assets/images/undraw_web_search_re_efla.svg
+    - assets/images/undraw_safe_re_kiil.svg
+    - assets/Sample_Report.json
+    - assets/images/mosque.jpeg
+    - assets/images/river.jpeg
+    - assets/images/river2.jpeg
+    - assets/images/road.jpeg
+    - assets/images/rock.jpeg
+    - assets/images/rock2.jpeg
+    - assets/images/insight.jpeg
+    - assets/images/backup.jpeg
+    - assets/images/secure.jpeg
+    - assets/images/history.jpeg
+    - assets/images/scan.jpeg
+    - assets/images/review.jpeg
+    - assets/images/organize.jpeg
+    - assets/images/alert.png
+    - assets/images/tax.jpeg
+    - assets/images/welcome.png
+    - assets/images/business.png
+    - assets/jsonFiles/
+    - assets/images/issue.png
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: fonts/Schyler-Regular.ttf
+  #       - asset: fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: fonts/TrajanPro.ttf
+  #       - asset: fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
