@@ -1,0 +1,182 @@
+[
+
+    {
+        "businessID" : 0,
+        "businessName" : "OMEGA - ARUSHA",
+        "businessBRELA": "002299",
+        "businessProducts" :[
+            {
+                "name" : "Iphone 11",
+                "price" : "1,500,000",
+                "currency" : "Tsh",
+                "unit" : "pair"
+            },
+            {
+                "name" : "Iphone 12",
+                "price" : "1,900,000",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Iphone 13",
+                "price" : "2,300,000",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Iphone 14",
+                "price" : "2,700,000",
+                "currency" : "Tsh",
+                "unit" : "item"
+            }
+        ]
+    },
+    {
+        "businessID" : 1,
+        "businessName" : "OMEGA - DODOMA",
+        "businessBRELA": "002200",
+        "businessProducts" :[
+            {
+                "name" : "Malapa",
+                "price" : "5500",
+                "currency" : "Tsh",
+                "unit" : "pair"
+            },
+            {
+                "name" : "Ndoo",
+                "price" : "4000",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Kiwi",
+                "price" : "2500",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Colgate Tooth Paste",
+                "price" : "3500",
+                "currency" : "Tsh",
+                "unit" : "item"
+            }
+        ]
+    },
+    {
+        "businessID" : 2,
+        "businessName" : "OMEGA - MWANZA",
+        "businessBRELA": "002201",
+        "businessProducts" :[
+            {
+                "name" : "Doffi",
+                "price" : "1500",
+                "currency" : "Tsh",
+                "unit" : "packet"
+            },
+            {
+                "name" : "Barafu",
+                "price" : "100",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Malapa",
+                "price" : "5500",
+                "currency" : "Tsh",
+                "unit" : "pair"
+            },
+            {
+                "name" : "Ndoo",
+                "price" : "4000",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Kiwi",
+                "price" : "2500",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Colgate Tooth Paste",
+                "price" : "3500",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Doffi",
+                "price" : "1500",
+                "currency" : "Tsh",
+                "unit" : "packet"
+            },
+            {
+                "name" : "Barafu",
+                "price" : "100",
+                "currency" : "Tsh",
+                "unit" : "item"
+            }
+        ]
+    },
+    {
+        "businessID" : 3,
+        "businessName" : "OMEGA - DAR",
+        "businessBRELA": "002202",
+        "businessProducts" :[
+            {
+                "name" : "Gutter",
+                "price" : "5,500,000",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Sandles",
+                "price" : "24000",
+                "currency" : "Tsh",
+                "unit" : "pair"
+            }
+        ]
+    },
+    {
+        "businessID" : 4,
+        "businessName" : "OMEGA - MBEYA",
+        "businessBRELA": "002203",
+        "businessProducts" :[
+            {
+                "name" : "Kiwi",
+                "price" : "2500",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Colgate Tooth Paste",
+                "price" : "3500",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Doffi",
+                "price" : "1500",
+                "currency" : "Tsh",
+                "unit" : "packet"
+            },
+            {
+                "name" : "Barafu",
+                "price" : "100",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Gutter",
+                "price" : "5,500,000",
+                "currency" : "Tsh",
+                "unit" : "item"
+            },
+            {
+                "name" : "Sandles",
+                "price" : "24000",
+                "currency" : "Tsh",
+                "unit" : "pair"
+            }
+        ]
+    }
+]

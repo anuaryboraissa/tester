@@ -1,14 +1,14 @@
-// ignore_for_file: library_prefixes
-
-import 'package:erisiti/business/productList/helper.dart';
+import 'dart:convert';
+import 'package:erisiti/business/productList/widgets.dart/productWidget.dart';
+import 'package:erisiti/business/productList/widgets.dart/searchWidget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import '../registerProducts/registerProducts.dart';
-import 'widgets.dart/productsActionButton.dart';
+import 'package:flutter/services.dart' as rootBundle;
+import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ProductList extends StatefulWidget {
-  const ProductList({super.key});
+  final int businessID;
+  const ProductList({super.key, required this.businessID});
 
   @override
   State<ProductList> createState() => _ProductListState();
@@ -17,111 +17,125 @@ class ProductList extends StatefulWidget {
 class _ProductListState extends State<ProductList> {
   @override
   void initState() {
+    // TODO: implement initState
     super.initState();
     readJSON();
   }
+
+  String query = "";
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.cyan,
-        title: const Text(
-          "The Business",
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.bold, fontSize: 21),
+        leading: BackButton( color: const Color(0xFF0081A0)),
+        elevation: 0,
+        backgroundColor: Colors.white,
+        title: Text(
+          "${ownerBusinesses[widget.businessID]['businessName'].toString()}",
+          style: const TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 21),
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const RegisterProduct(),
-                    ));
-              },
+              onPressed: () {},
               icon: const Icon(
                 CupertinoIcons.add,
-                color: Colors.white,
+                color: Color(0xFF0081A0),
               )),
         ],
+        centerTitle: true,
       ),
-      body: productList.isEmpty
+      body: theProductList.isEmpty
           ? const Center(
               child: CircularProgressIndicator(),
             )
-          : ListView.builder(
-              itemCount: productList.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(vertical: 21),
-                    decoration: BoxDecoration(
-                        color: Colors.cyan.shade700,
-                        borderRadius: BorderRadius.circular(21),
-                        boxShadow: const [
-                          BoxShadow(
-                            color: Colors.black,
-                            blurRadius: 7.0,
-                          )
+          : Column(
+              children: [
+                SearchWidget(
+                  hintText: "Search Products",
+                  result: (String query) {
+                    setState(() {
+                      if (query.isNotEmpty) {
+                        searching = true;
+                        this.query = query;
+                      } else {
+                        searching = false;
+                        this.query = "";
+                      }
+                    });
+                  },
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: searching
+                        ? searchItem(query).length
+                        : theProductList.length,
+                    itemBuilder: (context, index) {
+                      final item = searching
+                          ? searchItem(query)[index]
+                          // : productList[0]['businessProducts'][0]['name'];
+                          : theProductList[index];
+                      return Slidable(
+                        startActionPane:
+                            ActionPane(motion: StretchMotion(), children: [
+                          SlidableAction(
+                            onPressed: (context) {},
+                            backgroundColor: Color(0xFF0081A0),
+                            icon: CupertinoIcons.refresh_circled,
+                            label: 'Edit',
+                          ),
+                          SlidableAction(
+                            onPressed: (context) {},
+                            backgroundColor: Colors.red,
+                            icon: CupertinoIcons.delete,
+                            label: 'Delete',
+                          ),
                         ]),
-                    child: Column(
-                      children: [
-                        ListTile(
-                          leading: CircleAvatar(
-                            backgroundColor: Colors.white,
-                            child: Text(
-                              "${index + 1}",
-                              style: const TextStyle(
-                                  color: Colors.cyan,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 21),
-                            ),
+                        endActionPane:
+                            ActionPane(motion: const BehindMotion(), children: [
+                          SlidableAction(
+                            onPressed: (context) {},
+                            backgroundColor: const Color(0xFF0081A0),
+                            icon: Icons.more_horiz,
+                            label: 'More',
                           ),
-                          title: Text(
-                            productList[index]['name'].toString(),
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 21),
-                          ),
-                          trailing: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                "${productList[index]['currency'].toString()} ${productList[index]['price'].toString()}",
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14),
-                              ),
-                              Text(
-                                "Per ${productList[index]['unit'].toString()}",
-                                style: const TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const productsActionButtons(),
-                      ],
-                    ),
+                        ]),
+                        child: ProductWidget(
+                            productName: "${item['name']}",
+                            productUnit: "${item['unit']}",
+                            productCurrency: "${item['currency']}",
+                            productAmount: "${item['price']}"),
+                      );
+                    },
                   ),
-                );
-              },
+                ),
+              ],
             ),
     );
   }
 
-  List<dynamic> productList = [];
-  readJSON() {
-    ProductHelper.getProducts().then((value) {
-      setState(() {
-        productList = value;
-      });
+  List<dynamic> ownerBusinesses = [];
+  List<dynamic> theProductList = [];
+  Future<void> readJSON() async {
+    final String theFileWithJSONData = await rootBundle.rootBundle
+        .loadString('assets/jsonFiles/userRegisteredBusiness.json');
+    final capturedJSONData = await json.decode(theFileWithJSONData);
+    setState(() {
+      ownerBusinesses = capturedJSONData;
     });
+    theProductList = ownerBusinesses[widget.businessID]['businessProducts'];
+  }
+
+  bool searching = false;
+
+  List<dynamic> searchItem(String query) {
+    return theProductList
+        .where((element) => element['name']
+            .toString()
+            .toLowerCase()
+            .contains(query.toLowerCase()))
+        .toList();
   }
 }

@@ -1,10 +1,10 @@
-import 'package:erisiti/business/businessList/businessList.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/bottombar.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/home/home.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/more/more.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/tips/home.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../business/businessList/BusinessList.dart';
 import 'features/receipts/search/search.dart';
 
 class DashboardPage extends StatefulWidget {
