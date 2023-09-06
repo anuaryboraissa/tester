@@ -24,3 +24,9 @@ final class PasswordVerificationState extends LoginState {
 
   PasswordVerificationState(this.successfully, this.tinNumber);
 }
+
+final class LoginLoadingState extends LoginState {
+  final bool loading;
+
+  LoginLoadingState(this.loading);
+}

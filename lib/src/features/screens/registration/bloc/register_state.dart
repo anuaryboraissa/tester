@@ -60,3 +60,9 @@ final class PasswordResetState extends RegisterState {
 
   PasswordResetState(this.successfully);
 }
+
+final class RegisterLoadingState extends RegisterState {
+  final bool loading;
+
+  RegisterLoadingState(this.loading);
+}

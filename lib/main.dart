@@ -72,7 +72,11 @@ class _ErisitiState extends State<Erisiti> {
                   ? DashboardPage(loggedUser: {
                       "firstName": state.loggedUser!.firstName,
                       "lastName": state.loggedUser!.lastName,
-                      "tinNumber": state.loggedUser!.tinNumber
+                      "tinNumber": state.loggedUser!.tinNumber,
+                      "phone": state.loggedUser!.phoneNumber,
+                      "userType": state.loggedUser!.userType,
+                      "token": state.loggedUser!.token,
+                      "refreshToken": state.loggedUser!.refreshToken
                     })
                   : const Onboarding(),
             );

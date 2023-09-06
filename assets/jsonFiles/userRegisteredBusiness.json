@@ -9,25 +9,29 @@
                 "name" : "Iphone 11",
                 "price" : "1,500,000",
                 "currency" : "Tsh",
-                "unit" : "pair"
+                "unit" : "pair",
+                 "id":1
             },
             {
                 "name" : "Iphone 12",
                 "price" : "1,900,000",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":2
             },
             {
                 "name" : "Iphone 13",
                 "price" : "2,300,000",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":3
             },
             {
                 "name" : "Iphone 14",
                 "price" : "2,700,000",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":4
             }
         ]
     },
@@ -40,25 +44,29 @@
                 "name" : "Malapa",
                 "price" : "5500",
                 "currency" : "Tsh",
-                "unit" : "pair"
+                "unit" : "pair",
+                 "id":1
             },
             {
                 "name" : "Ndoo",
                 "price" : "4000",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":2
             },
             {
                 "name" : "Kiwi",
                 "price" : "2500",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":3
             },
             {
                 "name" : "Colgate Tooth Paste",
                 "price" : "3500",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":4
             }
         ]
     },
@@ -71,49 +79,57 @@
                 "name" : "Doffi",
                 "price" : "1500",
                 "currency" : "Tsh",
-                "unit" : "packet"
+                "unit" : "packet",
+                 "id":1
             },
             {
                 "name" : "Barafu",
                 "price" : "100",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":2
             },
             {
                 "name" : "Malapa",
                 "price" : "5500",
                 "currency" : "Tsh",
-                "unit" : "pair"
+                "unit" : "pair",
+                 "id":3
             },
             {
                 "name" : "Ndoo",
                 "price" : "4000",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":4
             },
             {
                 "name" : "Kiwi",
                 "price" : "2500",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":5
             },
             {
                 "name" : "Colgate Tooth Paste",
                 "price" : "3500",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":6
             },
             {
                 "name" : "Doffi",
                 "price" : "1500",
                 "currency" : "Tsh",
-                "unit" : "packet"
+                "unit" : "packet",
+                 "id":7
             },
             {
                 "name" : "Barafu",
                 "price" : "100",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":8
             }
         ]
     },
@@ -126,13 +142,15 @@
                 "name" : "Gutter",
                 "price" : "5,500,000",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":1
             },
             {
                 "name" : "Sandles",
                 "price" : "24000",
                 "currency" : "Tsh",
-                "unit" : "pair"
+                "unit" : "pair",
+                 "id":2
             }
         ]
     },
@@ -145,37 +163,43 @@
                 "name" : "Kiwi",
                 "price" : "2500",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":1
             },
             {
                 "name" : "Colgate Tooth Paste",
                 "price" : "3500",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":2
             },
             {
                 "name" : "Doffi",
                 "price" : "1500",
                 "currency" : "Tsh",
-                "unit" : "packet"
+                "unit" : "packet",
+                 "id":3
             },
             {
                 "name" : "Barafu",
                 "price" : "100",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":4
             },
             {
                 "name" : "Gutter",
                 "price" : "5,500,000",
                 "currency" : "Tsh",
-                "unit" : "item"
+                "unit" : "item",
+                 "id":5
             },
             {
                 "name" : "Sandles",
                 "price" : "24000",
                 "currency" : "Tsh",
-                "unit" : "pair"
+                "unit" : "pair",
+                 "id":6
             }
         ]
     },
@@ -188,13 +212,15 @@
                 "name" : "Ngorongoro",
                 "price" : "5,500,000",
                 "currency" : "Tsh",
-                "unit" : "trip"
+                "unit" : "trip",
+                 "id":1
             },
             {
                 "name" : "Serengeti",
                 "price" : "2,400,000",
                 "currency" : "Tsh",
-                "unit" : "trip"
+                "unit" : "trip",
+                 "id":2
             }
         ]
     }

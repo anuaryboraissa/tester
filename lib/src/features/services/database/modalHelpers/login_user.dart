@@ -31,7 +31,11 @@ class LoginUserHelper {
     return {
       LoginUserDbHelper.columnTinNumber: user.tinNumber,
       LoginUserDbHelper.columnFirstName: user.firstName,
-      LoginUserDbHelper.columnLastName: user.lastName
+      LoginUserDbHelper.columnLastName: user.lastName,
+      LoginUserDbHelper.columnPhoneNumber: user.phoneNumber,
+      LoginUserDbHelper.columnUserType: user.userType,
+      LoginUserDbHelper.columnToken: user.token,
+      LoginUserDbHelper.columnRefreshToken: user.refreshToken
     };
   }
 
@@ -41,7 +45,11 @@ class LoginUserHelper {
         : LoginUser(
             firstName: map[LoginUserDbHelper.columnFirstName],
             tinNumber: map[LoginUserDbHelper.columnTinNumber],
-            lastName: map[LoginUserDbHelper.columnLastName]);
+            lastName: map[LoginUserDbHelper.columnLastName],
+            phoneNumber: map[LoginUserDbHelper.columnPhoneNumber],
+            userType: map[LoginUserDbHelper.columnUserType],
+            token: map[LoginUserDbHelper.columnToken],
+            refreshToken: map[LoginUserDbHelper.columnRefreshToken]);
   }
 
   dropDatabase() {

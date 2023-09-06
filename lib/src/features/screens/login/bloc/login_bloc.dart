@@ -20,6 +20,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     on<LoginProcessEvent>(loginProcessEvent);
     on<VerifyForgotPasswordEvent>(verifyForgotPasswordEvent);
     on<ValidateMothersSurname>(validateMothersSurname);
+    on<InitializeLoadingEvent>(initializeLoadingEvent);
   }
 
   FutureOr<void> loginEvent(LoginEvent event, Emitter<LoginState> emit) {}
@@ -43,12 +44,17 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   FutureOr<void> loginProcessEvent(
       LoginProcessEvent event, Emitter<LoginState> emit) async {
     var ans = await LoginService().login(event.tinNumber, event.password);
-
-    if (ans['status'] == 'success') {
+    print("hey there ${ans}");
+    if (ans['data'] != null && ans['code'] == 5000) {
+      print("hey there ${ans['data']}");
       LoginUser user = LoginUser(
-          firstName: ans['firstName'],
-          lastName: ans['lastName'],
-          tinNumber: event.tinNumber);
+          firstName: ans['data']['firstName'],
+          lastName: ans['data']['lastName'],
+          tinNumber: ans['data']['tinNo'],
+          phoneNumber: ans['data']['phoneNumber'],
+          userType: ans['data']['userType'],
+          token: ans['data']['token'],
+          refreshToken: ans['data']['refreshToken']);
 
       int inserted = await LoginUserHelper().insert(user);
 
@@ -56,8 +62,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         LoginUser? loggedUser = await LoginUserHelper().queryById(1);
 
         // ignore: use_build_context_synchronously
-        LoginServiceHelper.moveToDashboard(event.context, loggedUser!.firstName,
-            loggedUser.lastName, loggedUser.tinNumber);
+        LoginServiceHelper.moveToDashboard(
+            event.context,
+            loggedUser!.firstName,
+            loggedUser.lastName,
+            loggedUser.tinNumber,
+            loggedUser.phoneNumber,
+            loggedUser.userType,
+            loggedUser.token,
+            loggedUser.refreshToken);
       } else {
         Fluttertoast.showToast(msg: "fail to save user");
       }
@@ -84,6 +97,11 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     } else {
       emit(MothersSurnameValidationState(false));
     }
+  }
+
+  FutureOr<void> initializeLoadingEvent(
+      InitializeLoadingEvent event, Emitter<LoginState> emit) {
+    emit(LoginLoadingState(event.loading));
   }
 }
 

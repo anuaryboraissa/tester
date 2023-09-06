@@ -57,9 +57,11 @@ final class RegistrationEvent extends RegisterEvent {
   final String account;
   final String password;
   final String passwordConfirm;
+  final String fullName;
+  final String phoneNumber;
 
-  RegistrationEvent(
-      this.tinNumber, this.account, this.password, this.passwordConfirm);
+  RegistrationEvent(this.tinNumber, this.account, this.password,
+      this.passwordConfirm, this.fullName, this.phoneNumber);
 }
 
 final class ResetPasswordEvent extends RegisterEvent {
@@ -68,4 +70,10 @@ final class ResetPasswordEvent extends RegisterEvent {
   final String rptPassword;
 
   ResetPasswordEvent(this.tinNumber, this.newPassword, this.rptPassword);
+}
+
+class InitializeRegisterLoadingEvent extends RegisterEvent {
+  final bool loading;
+
+  InitializeRegisterLoadingEvent(this.loading);
 }

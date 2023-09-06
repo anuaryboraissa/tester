@@ -38,7 +38,7 @@ class _IssueBodyState extends State<IssueBody>
   getProducts() {
     ProductHelper.getProducts().then((value) {
       setState(() {
-        items = value;
+        items = value[0]["businessProducts"];
       });
     });
   }
@@ -53,6 +53,7 @@ class _IssueBodyState extends State<IssueBody>
 
   TextEditingController amount = TextEditingController();
   TextEditingController quantity = TextEditingController();
+  String initialAmount = "0";
 
   @override
   Widget build(BuildContext context) {
@@ -90,14 +91,18 @@ class _IssueBodyState extends State<IssueBody>
                     onChanged: (value) {
                       // widget.businessType(value!);
 
-                      quantity.text = items
+                      units = items
                           .where((element) => element['id'] == value)
                           .single['unit']
                           .toString();
+                      setState(() {
+                        quantity.text = "1";
+                      });
 
                       amount.text =
                           "${items.where((element) => element['id'] == value).single['price']} Tshs";
-
+                      initialAmount =
+                          "${items.where((element) => element['id'] == value).single['price']} Tshs";
                       widget.itemName(items
                           .where((element) => element['id'] == value)
                           .single['name']);
@@ -112,17 +117,21 @@ class _IssueBodyState extends State<IssueBody>
                       keyboardType: TextInputType.number,
                       onChanged: (value) {
                         widget.itemQuantity(value);
-                        widget.itemAmount(
-                            "${int.parse(amount.text.replaceAll("Tshs", "").replaceAll(" ", "")) * int.parse(value.isEmpty ? "1" : value)} Tshs");
+                        amount.text = value.isEmpty
+                            ? initialAmount
+                            : "${int.parse(amount.text.replaceAll("Tshs", "").replaceAll(" ", "").replaceAll(",", "")) * int.parse(value.isEmpty ? "1" : value)} Tshs";
+                        widget.itemAmount(value.isEmpty
+                            ? initialAmount
+                            : "${int.parse(amount.text.replaceAll("Tshs", "").replaceAll(" ", "").replaceAll(",", "")) * int.parse(value.isEmpty ? "1" : value)} Tshs");
                       },
-                      decoration: const InputDecoration(
+                      decoration: InputDecoration(
                           prefix: Padding(
-                            padding: EdgeInsets.only(right: 8.0),
-                            child: Text("KG"),
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Text(units),
                           ),
                           hintText: "Quantity",
-                          contentPadding: EdgeInsets.all(20),
-                          border: OutlineInputBorder(
+                          contentPadding: const EdgeInsets.all(20),
+                          border: const OutlineInputBorder(
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)))),
                     ),

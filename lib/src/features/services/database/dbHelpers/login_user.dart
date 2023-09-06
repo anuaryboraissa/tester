@@ -10,6 +10,10 @@ class LoginUserDbHelper {
   static const columnTinNumber = 'tinNumber';
   static const columnFirstName = "firstName";
   static const columnLastName = "lastName";
+  static const columnPhoneNumber = "phone";
+  static const columnUserType = "userType";
+  static const columnToken = "token";
+  static const columnRefreshToken = "refreshToken";
   factory LoginUserDbHelper() {
     return instance;
   }
@@ -91,7 +95,11 @@ class LoginUserDbHelper {
       $columnId INTEGER PRIMARY KEY,
       $columnTinNumber  TEXT NOT NULL,
       $columnFirstName TEXT NOT NULL,
-      $columnLastName TEXT NOT NULL
+      $columnLastName TEXT NOT NULL,
+      $columnPhoneNumber TEXT NOT NULL,
+      $columnUserType TEXT NOT NULL,
+      $columnToken TEXT NOT NULL,
+      $columnRefreshToken TEXT NOT NULL
       )
       ''');
   }

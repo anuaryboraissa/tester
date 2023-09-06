@@ -56,6 +56,8 @@ class _CreateAccountState extends State<CreateAccount> {
     ));
   }
 
+  bool loading = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -80,9 +82,11 @@ class _CreateAccountState extends State<CreateAccount> {
           ),
         ),
       ),
-      body: BlocBuilder<RegisterBloc, RegisterState>(
-        bloc: registerBloc,
-        builder: (context, state) {
+      body: BlocConsumer<RegisterBloc, RegisterState>(
+        listener: (context, state) {
+          if (state is RegisterLoadingState) {
+            loading = state.loading;
+          }
           if (state is ValidateTinNumberState) {
             tinValid = state.valid;
           } else if (state is ValidateUserAccountState) {
@@ -96,10 +100,9 @@ class _CreateAccountState extends State<CreateAccount> {
           } else if (state is ValidateFullNameState) {
             fullNameValid = state.valid;
           } else if (state is RegistrationState) {
-            Fluttertoast.showToast(
-                msg:
-                    "code ${state.result['status']} status ${state.result['message']} ");
-            if (state.result['status'] == "success") {
+            registerBloc.add(InitializeRegisterLoadingEvent(false));
+            Fluttertoast.showToast(msg: " ${state.result['message']} ");
+            if (state.result['code'] == 5000) {
               realTinNumber.clear();
               realPassword.clear();
               passwordConfirm.clear();
@@ -122,6 +125,9 @@ class _CreateAccountState extends State<CreateAccount> {
               }
             }
           }
+        },
+        bloc: registerBloc,
+        builder: (context, state) {
           return Container(
             padding: const EdgeInsets.all(21.0),
             child: ListView(
@@ -390,22 +396,32 @@ class _CreateAccountState extends State<CreateAccount> {
                                 accountValid &&
                                 tinValid)
                         ? () {
+                            registerBloc
+                                .add(InitializeRegisterLoadingEvent(true));
                             registerBloc.add(RegistrationEvent(
                                 realTinNumber.text,
                                 _selectedAccount!,
                                 realPassword.text,
-                                passwordConfirm.text));
+                                passwordConfirm.text,
+                                fullName.text,
+                                phoneNumber.text));
                           }
                         : null,
-                    child: Text(
-                      "Sign up".toUpperCase(),
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 25,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: 'Popins',
-                      ),
-                    ),
+                    child: loading
+                        ? const Center(
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(
+                            "Sign up".toUpperCase(),
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 25,
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'Popins',
+                            ),
+                          ),
                   ),
                 ),
                 Padding(

@@ -29,3 +29,9 @@ final class VerifyForgotPasswordEvent extends LoginEvent {
 
   VerifyForgotPasswordEvent(this.tinNumber, this.lastName);
 }
+
+class InitializeLoadingEvent extends LoginEvent {
+  final bool loading;
+
+  InitializeLoadingEvent(this.loading);
+}

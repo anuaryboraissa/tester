@@ -7,6 +7,5 @@ class GlobalInitial extends GlobalState {}
 
 class SuccessInitializationState extends GlobalState {
   final LoginUser? loggedUser;
-
   SuccessInitializationState(this.loggedUser);
 }

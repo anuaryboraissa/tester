@@ -22,6 +22,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     on<ResetPasswordEvent>(resetPasswordEvent);
     on<ValidatePhoneEvent>(validatePhoneEvent);
     on<ValidateFullNameEvent>(validateFullNameEvent);
+    on<InitializeRegisterLoadingEvent>(initializeLoadingEvent);
   }
 
   FutureOr<void> registerEvent(
@@ -68,7 +69,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     }
   }
 
-  bool isPasswordCompliant(String password, [int minLength = 7]) {
+  bool isPasswordCompliant(String password, [int minLength = 9]) {
     if (password.isEmpty) {
       return false;
     }
@@ -96,9 +97,26 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   FutureOr<void> registrationEvent(
       RegistrationEvent event, Emitter<RegisterState> emit) async {
+    String firstName = "";
+    String middleName = "";
+    String lastName = "";
+    if (event.fullName.split(" ").length > 2) {
+      firstName = event.fullName.split(" ")[0];
+      middleName = event.fullName.split(" ")[1];
+      lastName = event.fullName.split(" ")[2];
+    } else {
+      firstName = event.fullName.split(" ")[0];
+      lastName = event.fullName.split(" ")[1];
+    }
     if (event.password == event.passwordConfirm) {
-      var result = await RegistrationService().registerUser(event.tinNumber,
-          event.account, event.password, event.passwordConfirm);
+      var result = await RegistrationService().registerUser(
+          event.tinNumber,
+          event.account.toUpperCase(),
+          event.password,
+          firstName,
+          lastName,
+          middleName,
+          event.phoneNumber);
       emit(RegistrationState(result, event.account, event.tinNumber));
     } else {
       emit(RegistrationState(
@@ -143,5 +161,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     } else {
       emit(ValidateFullNameState(false));
     }
+  }
+
+  FutureOr<void> initializeLoadingEvent(
+      InitializeRegisterLoadingEvent event, Emitter<RegisterState> emit) {
+    emit(RegisterLoadingState(event.loading));
   }
 }

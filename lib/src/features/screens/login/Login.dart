@@ -21,6 +21,7 @@ class _LoginState extends State<Login> {
   String userPassword = '';
   TextEditingController tinNumberEditing = TextEditingController();
   TextEditingController passwordEditing = TextEditingController();
+  bool loading = false;
   @override
   Widget build(BuildContext context) {
     LoginBloc loginBloc = LoginBloc();
@@ -109,10 +110,15 @@ class _LoginState extends State<Login> {
                   child: Directionality(
                     textDirection: TextDirection.rtl,
                     child: ElevatedButton.icon(
-                      label: const Text("LOGIN"),
+                      label: loading
+                          ? const CircularProgressIndicator(
+                              color: Colors.white,
+                            )
+                          : const Text("LOGIN"),
                       icon: const Icon(Icons.login),
                       onPressed: tinNumberValid != null && tinNumberValid
                           ? () {
+                              
                               loginBloc.add(LoginProcessEvent(
                                   tinNumberEditing.text,
                                   passwordEditing.text,

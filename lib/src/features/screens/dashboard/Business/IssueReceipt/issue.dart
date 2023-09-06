@@ -87,18 +87,17 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
             if (addItem)
               IssueBody(
                 itemAmount: (String amount) {
-                  print("item amount is of $amount..........................");
+                  itemAmount = amount;
                 },
                 itemName: (String name) {
                   itemName = name;
                 },
                 itemQuantity: (String quantity) {
                   itemQuantity = quantity;
-                  print(
-                      "number amount ${itemAmount.replaceAll("Tshs", "").replaceAll(" ", "")}");
+
                   setState(() {
                     itemAmount =
-                        "${int.parse(itemAmount.replaceAll("Tshs", "").replaceAll(" ", "")) * int.parse(quantity.isEmpty ? "1" : quantity)} Tshs";
+                        "${int.parse(itemAmount.replaceAll("Tshs", "").replaceAll(" ", "").replaceAll(",", "")) * int.parse(quantity.isEmpty ? "1" : quantity)} Tshs";
                   });
                 },
               )

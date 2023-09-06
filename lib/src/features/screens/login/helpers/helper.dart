@@ -5,12 +5,23 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../bloc/global_bloc.dart';
 
 class LoginServiceHelper {
-  static moveToDashboard(BuildContext context, String firstName,
-      String lastName, String tinNumber) {
+  static moveToDashboard(
+      BuildContext context,
+      String firstName,
+      String lastName,
+      String tinNumber,
+      String phone,
+      String userType,
+      String token,
+      String refreshToken) {
     final user = {
       "firstName": firstName,
       "lastName": lastName,
-      "tinNumber": tinNumber
+      "tinNumber": tinNumber,
+      "phone": phone,
+      "userType": userType,
+      "token": token,
+      "refreshToken": refreshToken
     };
     context.read<GlobalBloc>().add(InitializeEvent());
     Navigator.of(context).popUntil((route) => route.isFirst);
