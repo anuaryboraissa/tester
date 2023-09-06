@@ -26,6 +26,7 @@ class _UserBusinessListWidgetState extends State<UserBusinessListWidget> {
     readJSON();
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     return businessInfo.isEmpty
@@ -60,13 +61,15 @@ class _UserBusinessListWidgetState extends State<UserBusinessListWidget> {
                         : businessInfo[index];
                     return InkWell(
                       onTap: () {
-                        print("Business index : ${index + 1}");
+                        print("Business index : ${index}");
+                        print(
+                            "Registered BRELA ID: ${businesses['businessBRELA'].toString()}");
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) =>
-                                  ProductList(businessID: index),
-                            ));
+                                builder: (context) => ProductList(
+                                    businessName: businesses['businessName']
+                                        .toString())));
                       },
                       child: Container(
                         child: BusinessWidget(

@@ -7,14 +7,15 @@ import 'package:flutter/services.dart' as rootBundle;
 import 'package:flutter_slidable/flutter_slidable.dart';
 
 class ProductList extends StatefulWidget {
-  final int businessID;
-  const ProductList({super.key, required this.businessID});
+  final String businessName;
+  const ProductList({super.key, required this.businessName});
 
   @override
   State<ProductList> createState() => _ProductListState();
 }
 
 class _ProductListState extends State<ProductList> {
+
   @override
   void initState() {
     // TODO: implement initState
@@ -32,7 +33,8 @@ class _ProductListState extends State<ProductList> {
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
-          "${ownerBusinesses[widget.businessID]['businessName'].toString()}",
+          widget.businessName,
+          // "${ownerBusinesses[widget.businessID]['businessName'].toString()}",
           style: const TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 21),
         ),
@@ -115,7 +117,8 @@ class _ProductListState extends State<ProductList> {
             ),
     );
   }
-
+  String BRELAID = "002202";
+  String businessName = "OMEGA - DAR";
   List<dynamic> ownerBusinesses = [];
   List<dynamic> theProductList = [];
   Future<void> readJSON() async {
@@ -125,7 +128,9 @@ class _ProductListState extends State<ProductList> {
     setState(() {
       ownerBusinesses = capturedJSONData;
     });
-    theProductList = ownerBusinesses[widget.businessID]['businessProducts'];
+    // theProductList = ownerBusinesses[widget.businessID]['businessProducts'];
+    theProductList = ownerBusinesses.where((element) => element['businessName'].toString().contains(widget.businessName)).toList();
+    theProductList = theProductList[0]['businessProducts'];
   }
 
   bool searching = false;
