@@ -178,5 +178,24 @@
                 "unit" : "pair"
             }
         ]
+    },
+    {
+        "businessID" : 5,
+        "businessName" : "KABENGO SAFARIS",
+        "businessBRELA": "003377",
+        "businessProducts" :[
+            {
+                "name" : "Ngorongoro",
+                "price" : "5,500,000",
+                "currency" : "Tsh",
+                "unit" : "trip"
+            },
+            {
+                "name" : "Serengeti",
+                "price" : "2,400,000",
+                "currency" : "Tsh",
+                "unit" : "trip"
+            }
+        ]
     }
 ]
