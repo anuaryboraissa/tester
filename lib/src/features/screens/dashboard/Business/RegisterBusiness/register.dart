@@ -1,5 +1,6 @@
 import 'package:erisiti/src/features/screens/dashboard/Business/RegisterBusiness/components/business_page.dart';
 import 'package:erisiti/src/features/screens/dashboard/Business/RegisterBusiness/components/top_bar.dart';
+import 'package:erisiti/src/features/screens/dashboard/Business/items/businesses.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -68,7 +69,13 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10)),
                   backgroundColor: ApplicationStyles.realAppColor),
-              onPressed: addBusiness || businesses.isEmpty ? null : () {},
+              onPressed: addBusiness || businesses.isEmpty
+                  ? null
+                  : () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                        builder: (context) => const RegisteredBusiness(),
+                      ));
+                    },
               child: const Text("Continue")),
         ),
         floatingActionButton: FloatingActionButton(
