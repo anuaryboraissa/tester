@@ -47,10 +47,14 @@ class BusinessTopBar extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 8.0, top: 18),
-                child: Text(
-                  subTitle,
-                  // style: TextStyle(
-                  //     fontSize: 18, color: ApplicationStyles.realAppColor),
+                child: SizedBox(
+                  width: size.width * .42,
+                  child: Text(
+                    subTitle,
+                    // overflow: TextOverflow.ellipsis,
+                    // style: TextStyle(
+                    //     fontSize: 18, color: ApplicationStyles.realAppColor),
+                  ),
                 ),
               )
             ],

@@ -40,11 +40,6 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
               contentHolder(),
               if (addBusiness)
                 RegisterBody(
-                  addBusiness: (bool added) {
-                    setState(() {
-                      addBusiness = added;
-                    });
-                  },
                   businessName: (String businessName) {
                     this.businessName = businessName;
                   },
@@ -73,7 +68,9 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                   ? null
                   : () {
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => const RegisteredBusiness(),
+                        builder: (context) => RegisteredBusiness(
+                          businesses: businesses,
+                        ),
                       ));
                     },
               child: const Text("Continue")),
@@ -101,7 +98,8 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                     "name": businessName,
                     "type": businessType,
                     "registrationNumber": businessRegistrationNumber,
-                    "terms": businessTerms
+                    "terms": businessTerms,
+                    "id": businesses.length + 1
                   };
                   businesses.add(business);
                   businessName = "";

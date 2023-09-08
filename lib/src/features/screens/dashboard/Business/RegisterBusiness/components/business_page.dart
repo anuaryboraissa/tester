@@ -4,12 +4,11 @@ import 'package:flutter/material.dart';
 class RegisterBody extends StatefulWidget {
   const RegisterBody(
       {super.key,
-      required this.addBusiness,
       required this.businessName,
       required this.registrationNumber,
       required this.businessType,
       required this.businessTerms});
-  final Function(bool added) addBusiness;
+
   final Function(String businessName) businessName;
   final Function(String businessRegNumber) registrationNumber;
   final Function(String type) businessType;
