@@ -261,7 +261,7 @@ class _CreateAccountState extends State<CreateAccount> {
                                 : ApplicationStyles.realAppColor),
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      hintText: "begins with +255",
+                      hintText: "begins with 255",
                       contentPadding: const EdgeInsets.only(left: 600.0),
                       border: const OutlineInputBorder(),
                       prefixIcon: Container(

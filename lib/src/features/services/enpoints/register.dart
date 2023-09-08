@@ -5,22 +5,14 @@ import 'package:http/http.dart' as http;
 class RegistrationService {
   //167845674
 
-  Future<Map> registerUser(
-      String tinNumber,
-      String account,
-      String password,
-      String firstName,
-      String lastName,
-      String middleName,
-      String phone) async {
+  Future<Map> registerUser(String tinNumber, String account, String password,
+      String fullName, String phone) async {
     try {
       var headers = {'Content-Type': 'application/json'};
       var result = http
           .post(Uri.parse("http://172.17.17.141:8081/api/v1/auth/register"),
               body: json.encode({
-                "firstName": firstName,
-                "middleName": middleName,
-                "lastName": lastName,
+                "fullName": fullName,
                 "tinNo": tinNumber,
                 "phoneNumber": phone,
                 "userType": account,

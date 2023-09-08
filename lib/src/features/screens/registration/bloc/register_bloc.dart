@@ -97,26 +97,16 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   FutureOr<void> registrationEvent(
       RegistrationEvent event, Emitter<RegisterState> emit) async {
-    String firstName = "";
-    String middleName = "";
-    String lastName = "";
-    if (event.fullName.split(" ").length > 2) {
-      firstName = event.fullName.split(" ")[0];
-      middleName = event.fullName.split(" ")[1];
-      lastName = event.fullName.split(" ")[2];
-    } else {
-      firstName = event.fullName.split(" ")[0];
-      lastName = event.fullName.split(" ")[1];
-    }
     if (event.password == event.passwordConfirm) {
       var result = await RegistrationService().registerUser(
           event.tinNumber,
           event.account.toUpperCase(),
           event.password,
-          firstName,
-          lastName,
-          middleName,
+          event.fullName,
           event.phoneNumber);
+
+      print(result);
+
       emit(RegistrationState(result, event.account, event.tinNumber));
     } else {
       emit(RegistrationState(
@@ -144,10 +134,10 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
 
   FutureOr<void> validatePhoneEvent(
       ValidatePhoneEvent event, Emitter<RegisterState> emit) {
-    if (event.phone.length == 13 &&
-        event.phone.startsWith("+255") &&
-        (event.phone.substring(4, 5) == "6" ||
-            event.phone.substring(4, 5) == "7")) {
+    if (event.phone.length == 12 &&
+        event.phone.startsWith("255") &&
+        (event.phone.substring(3, 4) == "6" ||
+            event.phone.substring(3, 4) == "7")) {
       emit(ValidatePhoneNumberState(true));
     } else {
       emit(ValidatePhoneNumberState(false));

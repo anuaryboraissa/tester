@@ -82,6 +82,17 @@ class _RegisteredBusinessState extends State<RegisteredBusiness> {
                         }
                       },
                       businessId: business['id'],
+                      removeItem: (int businessId, int itemId) {
+                        setState(() {
+                          (savedProducts
+                                  .where((element) =>
+                                      element["businessId"] == businessId)
+                                  .single['products'] as List)
+                              .removeWhere(
+                                  (element2) => element2['id'] == itemId);
+                        });
+                        print(savedProducts);
+                      },
                     ),
                   ));
                 },

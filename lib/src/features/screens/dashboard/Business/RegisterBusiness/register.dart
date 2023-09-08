@@ -1,3 +1,4 @@
+import 'package:erisiti/src/constants/data/brela.dart';
 import 'package:erisiti/src/features/screens/dashboard/Business/RegisterBusiness/components/business_page.dart';
 import 'package:erisiti/src/features/screens/dashboard/Business/RegisterBusiness/components/top_bar.dart';
 import 'package:erisiti/src/features/screens/dashboard/Business/items/businesses.dart';
@@ -21,6 +22,16 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
   String businessType = "";
   String businessRegistrationNumber = "";
   String businessTerms = "";
+
+  List<Map<String, dynamic>> brelaBusinesses = [];
+
+  @override
+  void initState() {
+    setState(() {
+      brelaBusinesses = brela;
+    });
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,45 +86,86 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                     },
               child: const Text("Continue")),
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: ApplicationStyles.realAppColor,
-          onPressed: () {
-            setState(() {
-              if (addBusiness) {
-                if (businessType.isEmpty) {
-                  Fluttertoast.showToast(msg: "Business Type is required");
-                } else if (businessName.isEmpty) {
-                  Fluttertoast.showToast(msg: "Business Name is required");
-                } else if (businessRegistrationNumber.isEmpty) {
-                  Fluttertoast.showToast(
-                      msg: "Business Registration Number is required");
-                } else if (businessRegistrationNumber.contains(".") ||
-                    businessRegistrationNumber.contains(",") ||
-                    // isInteger(int.parse(businessRegistrationNumber)) ||
-                    businessRegistrationNumber.length != 6) {
-                  Fluttertoast.showToast(
-                      msg: "Business Registration Number is not valid");
-                } else {
-                  Map<String, dynamic> business = {
-                    "name": businessName,
-                    "type": businessType,
-                    "registrationNumber": businessRegistrationNumber,
-                    "terms": businessTerms,
-                    "id": businesses.length + 1
-                  };
-                  businesses.add(business);
-                  businessName = "";
-                  addBusiness = !addBusiness;
-                }
-              } else {
-                addBusiness = !addBusiness;
-              }
-            });
-          },
-          child: Icon(
-            addBusiness ? Icons.check : Icons.add,
-            size: 20,
-            color: Colors.white,
+        floatingActionButton: Align(
+          alignment: Alignment.bottomRight,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              if (addBusiness)
+                FloatingActionButton(
+                  backgroundColor: ApplicationStyles.realAppColor,
+                  onPressed: () {
+                    setState(() {
+                      addBusiness = !addBusiness;
+                    });
+                  },
+                  child: const Icon(Icons.close, color: Colors.red),
+                ),
+              const SizedBox(
+                height: 5,
+              ),
+              FloatingActionButton(
+                backgroundColor: ApplicationStyles.realAppColor,
+                onPressed: () {
+                  setState(() {
+                    if (addBusiness) {
+                      if (businessType.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Business Type is required");
+                      } else if (businessName.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Business Name is required");
+                      } else if (businessRegistrationNumber.isEmpty) {
+                        Fluttertoast.showToast(
+                            msg: "Business Registration Number is required");
+                      } else if (businessRegistrationNumber.contains(".") ||
+                          businessRegistrationNumber.contains(",") ||
+                          // isInteger(int.parse(businessRegistrationNumber)) ||
+                          businessRegistrationNumber.length != 6) {
+                        Fluttertoast.showToast(
+                            msg: "Business Registration Number is not valid");
+                      } else {
+                        List<Map<String, dynamic>> brelaBusiness =
+                            brelaBusinesses
+                                .where((element) =>
+                                    element['businessRegNumber'] ==
+                                        businessRegistrationNumber &&
+                                    element['tinNumber'] == widget.tinNumber)
+                                .toList();
+
+                        if (brelaBusiness.isNotEmpty) {
+                          Map<String, dynamic> business = {
+                            "name": businessName,
+                            "type": businessType,
+                            "registrationNumber": businessRegistrationNumber,
+                            "terms": businessTerms,
+                            "id": businesses.length + 1,
+                            "region": brelaBusiness.single['address']['region'],
+                            "district": brelaBusiness.single['address']
+                                ['district']
+                          };
+                          businesses.add(business);
+                          businessName = "";
+                          addBusiness = !addBusiness;
+                        } else {
+                          Fluttertoast.showToast(
+                              msg: "Your Business is not registered");
+                          Fluttertoast.showToast(
+                              msg: "Please Contact Brela For more information");
+                        }
+                      }
+                    } else {
+                      addBusiness = !addBusiness;
+                    }
+                  });
+                },
+                child: Icon(
+                  addBusiness ? Icons.check : Icons.add,
+                  size: 20,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
       ),

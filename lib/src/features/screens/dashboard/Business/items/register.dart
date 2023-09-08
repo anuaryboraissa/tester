@@ -10,10 +10,12 @@ class ItemRegisterPage extends StatefulWidget {
       {super.key,
       required this.business,
       required this.savedProducts,
-      required this.businessId});
+      required this.businessId,
+      required this.removeItem});
   final String business;
   final int businessId;
   final Function(Map<String, dynamic> products) savedProducts;
+  final Function(int businessId, int itemId) removeItem;
 
   @override
   State<ItemRegisterPage> createState() => _ItemRegisterPageState();
@@ -83,47 +85,66 @@ class _ItemRegisterPageState extends State<ItemRegisterPage> {
                     },
               child: const Text("Save Items")),
         ),
-        floatingActionButton: FloatingActionButton(
-          backgroundColor: ApplicationStyles.realAppColor,
-          onPressed: () {
-            setState(() {
-              if (addProduct) {
-                if (itemName.isEmpty) {
-                  Fluttertoast.showToast(msg: "Item Name is required");
-                } else if (price.isEmpty) {
-                  Fluttertoast.showToast(msg: "Item price is required");
-                } else if (unit.isEmpty) {
-                  Fluttertoast.showToast(msg: "Item unit is required");
-                } else if (currency.isEmpty) {
-                  Fluttertoast.showToast(msg: "Item Currency is required");
-                } else {
-                  Map<String, dynamic> item = {
-                    "name": itemName,
-                    "currency": currency,
-                    "unit": unit,
-                    "price": price,
-                    "acceptDecimal": acceptDecimal,
-                    "id": items.length + 1
-                  };
-                  items.add(item);
-                  Map<String, dynamic> businessProducts = {
-                    "businessId": widget.businessId,
-                    "products": [item]
-                  };
-                  widget.savedProducts(businessProducts);
+        floatingActionButton: Column(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            if (addProduct) ...[
+              FloatingActionButton(
+                backgroundColor: ApplicationStyles.realAppColor,
+                onPressed: () {
+                  setState(() {
+                    addProduct = !addProduct;
+                  });
+                },
+                child: const Icon(Icons.close, color: Colors.red),
+              ),
+              const SizedBox(
+                height: 5,
+              ),
+            ],
+            FloatingActionButton(
+              backgroundColor: ApplicationStyles.realAppColor,
+              onPressed: () {
+                setState(() {
+                  if (addProduct) {
+                    if (itemName.isEmpty) {
+                      Fluttertoast.showToast(msg: "Item Name is required");
+                    } else if (price.isEmpty) {
+                      Fluttertoast.showToast(msg: "Item price is required");
+                    } else if (unit.isEmpty) {
+                      Fluttertoast.showToast(msg: "Item unit is required");
+                    } else if (currency.isEmpty) {
+                      Fluttertoast.showToast(msg: "Item Currency is required");
+                    } else {
+                      Map<String, dynamic> item = {
+                        "name": itemName,
+                        "currency": currency,
+                        "unit": unit,
+                        "price": price,
+                        "acceptDecimal": acceptDecimal,
+                        "id": items.length + 1
+                      };
+                      items.add(item);
+                      Map<String, dynamic> businessProducts = {
+                        "businessId": widget.businessId,
+                        "products": [item]
+                      };
+                      widget.savedProducts(businessProducts);
 
-                  addProduct = !addProduct;
-                }
-              } else {
-                addProduct = !addProduct;
-              }
-            });
-          },
-          child: Icon(
-            addProduct ? Icons.check : Icons.add,
-            size: 20,
-            color: Colors.white,
-          ),
+                      addProduct = !addProduct;
+                    }
+                  } else {
+                    addProduct = !addProduct;
+                  }
+                });
+              },
+              child: Icon(
+                addProduct ? Icons.check : Icons.add,
+                size: 20,
+                color: Colors.white,
+              ),
+            ),
+          ],
         ));
   }
 
@@ -168,6 +189,7 @@ class _ItemRegisterPageState extends State<ItemRegisterPage> {
                   setState(() {
                     items.remove(
                         items.where((element) => element['id'] == id).single);
+                    widget.removeItem(widget.businessId, id);
                   });
                 },
                 icon: const Icon(Icons.close))
