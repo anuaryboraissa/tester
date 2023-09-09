@@ -2,8 +2,9 @@ import 'package:erisiti/src/constants/styles/style.dart';
 import 'package:flutter/material.dart';
 
 class BottomNavigation extends StatefulWidget {
-  const BottomNavigation({super.key, required this.currentPage});
-
+  const BottomNavigation(
+      {super.key, required this.currentPage, required this.userType});
+  final String userType;
   final Function(int currentPage) currentPage;
 
   @override
@@ -87,32 +88,33 @@ class _BottomNavigationState extends State<BottomNavigation> {
                   ],
                 ),
               ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    currentPage = 4;
-                    widget.currentPage(4);
-                  });
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Icon(
-                      Icons.iso,
-                      color: currentPage == 4
-                          ? ApplicationStyles.realAppColor
-                          : null,
-                    ),
-                    Text("Issue",
-                        style: ApplicationStyles.getStyle(
-                            false,
-                            10,
-                            currentPage == 4
-                                ? ApplicationStyles.realAppColor
-                                : null))
-                  ],
+              if (widget.userType == "BUSINESS")
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      currentPage = 4;
+                      widget.currentPage(4);
+                    });
+                  },
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Icon(
+                        Icons.iso,
+                        color: currentPage == 4
+                            ? ApplicationStyles.realAppColor
+                            : null,
+                      ),
+                      Text("Issue",
+                          style: ApplicationStyles.getStyle(
+                              false,
+                              10,
+                              currentPage == 4
+                                  ? ApplicationStyles.realAppColor
+                                  : null))
+                    ],
+                  ),
                 ),
-              ),
               GestureDetector(
                 onTap: () {
                   setState(() {

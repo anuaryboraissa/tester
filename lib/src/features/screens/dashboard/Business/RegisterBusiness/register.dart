@@ -3,6 +3,7 @@ import 'package:erisiti/src/features/screens/dashboard/Business/RegisterBusiness
 import 'package:erisiti/src/features/screens/dashboard/Business/RegisterBusiness/components/top_bar.dart';
 import 'package:erisiti/src/features/screens/dashboard/Business/items/businesses.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../../constants/styles/style.dart';
@@ -39,34 +40,33 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
     return SafeArea(
       child: Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const BusinessTopBar(
-                image: 'assets/images/business.png',
-                title: "Business",
-                subTitle: 'Register to continue',
-              ),
-              contentHolder(),
-              if (addBusiness)
-                RegisterBody(
-                  businessName: (String businessName) {
-                    this.businessName = businessName;
-                  },
-                  businessTerms: (String terms) {
-                    businessTerms = terms;
-                  },
-                  businessType: (String type) {
-                    businessType = type;
-                  },
-                  registrationNumber: (String businessRegNumber) {
-                    businessRegistrationNumber = businessRegNumber;
-                  },
-                )
-            ],
-          ),
-        ),
+            child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const BusinessTopBar(
+              image: 'assets/images/business.png',
+              title: "Business",
+              subTitle: 'Register to continue',
+            ),
+            contentHolder(),
+            if (addBusiness)
+              RegisterBody(
+                businessName: (String businessName) {
+                  this.businessName = businessName;
+                },
+                businessTerms: (String terms) {
+                  businessTerms = terms;
+                },
+                businessType: (String type) {
+                  businessType = type;
+                },
+                registrationNumber: (String businessRegNumber) {
+                  businessRegistrationNumber = businessRegNumber;
+                },
+              )
+          ],
+        )),
         bottomNavigationBar: Padding(
           padding: const EdgeInsets.all(10),
           child: ElevatedButton(
@@ -135,6 +135,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
 
                         if (brelaBusiness.isNotEmpty) {
                           Map<String, dynamic> business = {
+                            "tinNumber": widget.tinNumber,
                             "name": businessName,
                             "type": businessType,
                             "registrationNumber": businessRegistrationNumber,

@@ -2,6 +2,7 @@ import 'package:erisiti/src/features/screens/dashboard/features/bottombar.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/home/home.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/more/more.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/tips/home.dart';
+import 'package:erisiti/test.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../business/businessList/BusinessList.dart';
@@ -32,7 +33,9 @@ class _DashboardPageState extends State<DashboardPage> {
       pages.add(const SearchReceiptPage());
       pages.add(const MorePage());
       pages.add(const TipsHome());
-      pages.add(const BusinessList());
+      if (widget.loggedUser['userType'] == "BUSINESS") {
+        pages.add(const BusinessList());
+      }
     });
 
     super.initState();
@@ -49,6 +52,13 @@ class _DashboardPageState extends State<DashboardPage> {
               currentPageValue = currentPage;
             });
           },
+          userType: widget.loggedUser['userType'],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            TesterApp.analyze();
+          },
+          child: const Icon(Icons.add),
         ),
       ),
     );

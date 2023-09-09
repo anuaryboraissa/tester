@@ -116,7 +116,7 @@ class _HomeTopBarState extends State<HomeTopBar>
                           } else {
                             Navigator.of(context).push(MaterialPageRoute(
                               builder: (context) => const WelcomePage(
-                                tinNumber: "",
+                                tinNumber: "987654321",
                               ),
                             ));
                             //business navigate

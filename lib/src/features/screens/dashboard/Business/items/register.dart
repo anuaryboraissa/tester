@@ -11,11 +11,14 @@ class ItemRegisterPage extends StatefulWidget {
       required this.business,
       required this.savedProducts,
       required this.businessId,
-      required this.removeItem});
+      required this.removeItem,
+      required this.businessMap});
   final String business;
   final int businessId;
   final Function(Map<String, dynamic> products) savedProducts;
   final Function(int businessId, int itemId) removeItem;
+
+  final Map<String, dynamic> businessMap;
 
   @override
   State<ItemRegisterPage> createState() => _ItemRegisterPageState();
@@ -76,11 +79,6 @@ class _ItemRegisterPageState extends State<ItemRegisterPage> {
               onPressed: addProduct || items.isEmpty
                   ? null
                   : () {
-                      // Navigator.of(context).push(MaterialPageRoute(
-                      //   builder: (context) => RegisteredBusiness(
-                      //     businesses: businesses,
-                      //   ),
-                      // ));
                       Navigator.of(context).pop();
                     },
               child: const Text("Save Items")),
@@ -127,6 +125,11 @@ class _ItemRegisterPageState extends State<ItemRegisterPage> {
                       items.add(item);
                       Map<String, dynamic> businessProducts = {
                         "businessId": widget.businessId,
+                        "businessName": widget.businessMap['name'],
+                        "businessRegion": widget.businessMap['region'],
+                        "businessDistrict": widget.businessMap['district'],
+                        "businessRegistrationNumber":widget.businessMap['registrationNumber'],
+                        "businessTinNumber":widget.businessMap['tinNumber'],
                         "products": [item]
                       };
                       widget.savedProducts(businessProducts);

@@ -27,7 +27,6 @@ class LoginService {
         "dataList": null,
         "message": "$e"
       };
-      // loginStatus("fail", "something went wrong! $e");
     }
   }
 }
