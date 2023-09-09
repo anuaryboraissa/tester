@@ -8,8 +8,7 @@ class LoginUserDbHelper {
 
   static const columnId = 'id';
   static const columnTinNumber = 'tinNumber';
-  static const columnFirstName = "firstName";
-  static const columnLastName = "lastName";
+  static const columnFullName = "fullName";
   static const columnPhoneNumber = "phone";
   static const columnUserType = "userType";
   static const columnToken = "token";
@@ -94,8 +93,7 @@ class LoginUserDbHelper {
       CREATE TABLE IF NOT EXISTS $tableName (
       $columnId INTEGER PRIMARY KEY,
       $columnTinNumber  TEXT NOT NULL,
-      $columnFirstName TEXT NOT NULL,
-      $columnLastName TEXT NOT NULL,
+      $columnFullName TEXT NOT NULL,
       $columnPhoneNumber TEXT NOT NULL,
       $columnUserType TEXT NOT NULL,
       $columnToken TEXT NOT NULL,

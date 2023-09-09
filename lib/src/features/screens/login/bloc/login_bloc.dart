@@ -48,13 +48,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     if (ans['data'] != null && ans['code'] == 5000) {
       print("hey there ${ans['data']}");
       LoginUser user = LoginUser(
-          firstName: ans['data']['firstName'],
-          lastName: ans['data']['lastName'],
           tinNumber: ans['data']['tinNo'],
           phoneNumber: ans['data']['phoneNumber'],
           userType: ans['data']['userType'],
           token: ans['data']['token'],
-          refreshToken: ans['data']['refreshToken']);
+          refreshToken: ans['data']['refreshToken'],
+          fullName: ans['data']['fullName']);
 
       int inserted = await LoginUserHelper().insert(user);
 
@@ -64,8 +63,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         // ignore: use_build_context_synchronously
         LoginServiceHelper.moveToDashboard(
             event.context,
-            loggedUser!.firstName,
-            loggedUser.lastName,
+            loggedUser!.fullName,
             loggedUser.tinNumber,
             loggedUser.phoneNumber,
             loggedUser.userType,

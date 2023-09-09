@@ -30,8 +30,7 @@ class LoginUserHelper {
   Map<String, dynamic> toMap(LoginUser user) {
     return {
       LoginUserDbHelper.columnTinNumber: user.tinNumber,
-      LoginUserDbHelper.columnFirstName: user.firstName,
-      LoginUserDbHelper.columnLastName: user.lastName,
+      LoginUserDbHelper.columnFullName: user.fullName,
       LoginUserDbHelper.columnPhoneNumber: user.phoneNumber,
       LoginUserDbHelper.columnUserType: user.userType,
       LoginUserDbHelper.columnToken: user.token,
@@ -43,9 +42,8 @@ class LoginUserHelper {
     return map == null
         ? null
         : LoginUser(
-            firstName: map[LoginUserDbHelper.columnFirstName],
+            fullName: map[LoginUserDbHelper.columnFullName],
             tinNumber: map[LoginUserDbHelper.columnTinNumber],
-            lastName: map[LoginUserDbHelper.columnLastName],
             phoneNumber: map[LoginUserDbHelper.columnPhoneNumber],
             userType: map[LoginUserDbHelper.columnUserType],
             token: map[LoginUserDbHelper.columnToken],

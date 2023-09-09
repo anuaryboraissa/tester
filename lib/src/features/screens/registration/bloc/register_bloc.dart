@@ -135,9 +135,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   FutureOr<void> validatePhoneEvent(
       ValidatePhoneEvent event, Emitter<RegisterState> emit) {
     if (event.phone.length == 12 &&
-        event.phone.startsWith("255") &&
-        (event.phone.substring(3, 4) == "6" ||
-            event.phone.substring(3, 4) == "7")) {
+        event.phone.startsWith("255") && (event.phone.substring(3, 4) == "6" || event.phone.substring(3, 4) == "7" || event.phone.substring(3, 4) == "8" )) {
       emit(ValidatePhoneNumberState(true));
     } else {
       emit(ValidatePhoneNumberState(false));

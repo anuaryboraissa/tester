@@ -88,9 +88,9 @@ class _HomeTopBarState extends State<HomeTopBar>
                         height: 1,
                       ),
                       Text(
-                        widget.loggedUser['firstName'] == null
+                        widget.loggedUser['fullName'] == null
                             ? "loading...."
-                            : "${widget.loggedUser['firstName']} ${widget.loggedUser['lastName']}",
+                            : "${widget.loggedUser['fullName']}",
                         style: ApplicationStyles.getStyle(
                             false, 15, ApplicationStyles.realAppColor),
                       ),

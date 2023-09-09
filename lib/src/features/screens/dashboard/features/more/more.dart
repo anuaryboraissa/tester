@@ -25,9 +25,10 @@ class _MorePageState extends State<MorePage> {
   getLoginUser() {
     LoginUserHelper().queryById(1).then((value) {
       final user = {
-        "firstName": value!.firstName,
-        "lastName": value.lastName,
-        "tinNumber": value.tinNumber
+        "fullName": value!.fullName,
+        "phoneNumber": value.phoneNumber,
+        "tinNumber": value.tinNumber,
+        "userType": value.userType
       };
       setState(() {
         loggedUser = user;

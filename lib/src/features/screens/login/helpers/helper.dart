@@ -7,16 +7,14 @@ import '../../../bloc/global_bloc.dart';
 class LoginServiceHelper {
   static moveToDashboard(
       BuildContext context,
-      String firstName,
-      String lastName,
+      String fullName,
       String tinNumber,
       String phone,
       String userType,
       String token,
       String refreshToken) {
     final user = {
-      "firstName": firstName,
-      "lastName": lastName,
+      "fullName": fullName,
       "tinNumber": tinNumber,
       "phone": phone,
       "userType": userType,

@@ -67,11 +67,11 @@ class _ErisitiState extends State<Erisiti> {
             return MaterialApp(
               color: ApplicationStyles.realAppColor,
               debugShowCheckedModeBanner: false,
+              title: 'e-Risiti',
               home: (state is SuccessInitializationState) &&
                       state.loggedUser != null
                   ? DashboardPage(loggedUser: {
-                      "firstName": state.loggedUser!.firstName,
-                      "lastName": state.loggedUser!.lastName,
+                      "fullName": state.loggedUser!.fullName,
                       "tinNumber": state.loggedUser!.tinNumber,
                       "phone": state.loggedUser!.phoneNumber,
                       "userType": state.loggedUser!.userType,
