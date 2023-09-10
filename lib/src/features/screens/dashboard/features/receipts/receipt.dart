@@ -22,10 +22,13 @@ class _ReceiptPageState extends State<ReceiptPage> {
           children: [
             TopBar(
               taxAmount: widget.receiptsOverview['taxAmount'].toString(),
-              totalReceipts: widget.receiptsOverview['totalReceipts'],
-              totalAmount: widget.receiptsOverview['totalAmount'],
+              totalReceipts:
+                  widget.receiptsOverview['totalReceipts'].toString(),
+              totalAmount: widget.receiptsOverview['totalAmount'].toString(),
             ),
-            const ReceiptReport()
+            ReceiptReport(
+              receipts: widget.receiptsOverview['receipts'],
+            )
           ],
         ),
       ),

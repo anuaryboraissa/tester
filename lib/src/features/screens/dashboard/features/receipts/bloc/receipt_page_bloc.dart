@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:erisiti/src/constants/data/receipts.dart';
+import 'package:erisiti/src/features/services/enpoints/get_user_receipt_by_tin.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -29,15 +30,12 @@ class ReceiptPageBloc extends Bloc<ReceiptPageEvent, ReceiptPageState> {
   FutureOr<void> searchReceiptEvent(
       SearchReceiptEvent event, Emitter<ReceiptPageState> emit) {
     String query = event.query;
-    List<Receipt> allReceipts = AvailableReceipts.receipts
-        .map((e) => Receipt(
-            issuer: e["issuer"]!, address: e['address']!, phone: e["Phone"]!))
-        .toList();
-    List<Receipt> matchedReceipts = allReceipts
-        .where((element) =>
-            (element.address.toLowerCase().contains(query.toLowerCase())) ||
-            (element.issuer.toLowerCase().contains(query.toLowerCase())) ||
-            (element.phone.toLowerCase().contains(query.toLowerCase())))
+    List allReceipts = event.receipts;
+    List matchedReceipts = allReceipts
+        .where((element) => element['receiptNumber']
+            .toString()
+            .toLowerCase()
+            .contains(query.toLowerCase()))
         .toList();
 
     emit(ReceiptSearchState(query, receipts: matchedReceipts));
@@ -84,38 +82,90 @@ class ReceiptPageBloc extends Bloc<ReceiptPageEvent, ReceiptPageState> {
   FutureOr<void> submitDateEvent(
       SubmitDateEvent event, Emitter<ReceiptPageState> emit) async {
     try {
-      final response = await SearchReceiptService()
-          .searchReceipt(event.tinNumber, event.startDate, event.endDate);
-      Map receiptOverview;
-      print("response is ${response['message']}");
-      if (response['status'] == 'success') {
-        receiptOverview = {
-          "totalReceipts": response['noOfReceipts'],
-          "taxAmount": response['taxAmount'],
-          "totalAmount": response['totalAmount']
+      print("tin number is ${event.tinNumber}");
+      final result = await FindUserReceiptService.getUserReceiptByTin(
+          int.parse(event.tinNumber));
+      if (result['code'] == 5000) {
+        List receipts = result['data'];
+        print("before ${receipts.length}");
+        List filteredReceipts = receipts
+            .where((e) =>
+                DateTime.parse(e['createdAt'].toString().replaceRange(
+                            e['createdAt'].toString().indexOf("T"),
+                            e['createdAt'].toString().length,
+                            ""))
+                        .difference(DateTime.parse(event.startDate))
+                        .inDays >=
+                    0 &&
+                DateTime.parse(event.endDate)
+                        .difference(DateTime.parse(e['createdAt']
+                            .toString()
+                            .replaceRange(
+                                e['createdAt'].toString().indexOf("T"),
+                                e['createdAt'].toString().length,
+                                "")))
+                        .inDays >=
+                    0)
+            .toList();
+        print("response 2 ${filteredReceipts.length}");
+        int totalNumberOfReceipts = filteredReceipts.length;
+        print("s 1");
+        int taxAmount = 0;
+        int totalAmount = 0;
+        filteredReceipts.forEach((element) {
+          print("s 2");
+          taxAmount = element['tozo'] + taxAmount;
+          print("s kn");
+          totalAmount = element['amount'] + totalAmount;
+          print("s k");
+        });
+        print("s 4");
+        Map receiptOverview = {
+          "totalReceipts": totalNumberOfReceipts,
+          "taxAmount": taxAmount,
+          "totalAmount": totalAmount,
+          "receipts": filteredReceipts
         };
+        print("map $receiptOverview");
         // ignore: use_build_context_synchronously
         Navigator.of(event.context).push(MaterialPageRoute(
           builder: (context) => ReceiptPage(receiptsOverview: receiptOverview),
         ));
         emit(SubmitDateSuccessState());
-      } else if (response['message']
-          .toString()
-          .contains("Network is unreachable")) {
-        Fluttertoast.showToast(msg: "Unable to process request");
-        Fluttertoast.showToast(msg: "Network is unreachable");
+        // emit(FindUserReceiptByTinState(result['data'], false, "Success"));
       } else {
-        receiptOverview = {
-          "totalReceipts": "0",
-          "taxAmount": "0",
-          "totalAmount": "0"
-        };
-        // ignore: use_build_context_synchronously
-        Navigator.of(event.context).push(MaterialPageRoute(
-          builder: (context) => ReceiptPage(receiptsOverview: receiptOverview),
-        ));
-        emit(SubmitDateSuccessState());
+        // emit(FindUserReceiptByTinState(const [], true, result['messages']));
+        Fluttertoast.showToast(msg: "Unable to process request");
       }
+
+      // final response = await SearchReceiptService()
+      //     .searchReceipt(event.tinNumber, event.startDate, event.endDate);
+      // Map receiptOverview;
+      // print("response is ${response['message']}");
+      // if (response['status'] == 'success') {
+      //   receiptOverview = {
+      //     "totalReceipts": response['noOfReceipts'],
+      //     "taxAmount": response['taxAmount'],
+      //     "totalAmount": response['totalAmount']
+      //   };
+      // ignore: use_build_context_synchronously
+      // } else if (response['message']
+      //     .toString()
+      //     .contains("Network is unreachable")) {
+      //   Fluttertoast.showToast(msg: "Unable to process request");
+      //   Fluttertoast.showToast(msg: "Network is unreachable");
+      // } else {
+      //   receiptOverview = {
+      //     "totalReceipts": "0",
+      //     "taxAmount": "0",
+      //     "totalAmount": "0"
+      //   };
+      //   // ignore: use_build_context_synchronously
+      //   Navigator.of(event.context).push(MaterialPageRoute(
+      //     builder: (context) => ReceiptPage(receiptsOverview: receiptOverview),
+      //   ));
+      //   emit(SubmitDateSuccessState());
+      // }
 
       // ignore: use_build_context_synchronously
     } catch (e) {

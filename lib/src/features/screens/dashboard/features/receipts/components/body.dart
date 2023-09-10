@@ -1,12 +1,12 @@
 import 'package:erisiti/src/constants/styles/style.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/receipts/bloc/receipt_page_bloc.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/receipts/modal/helper.dart';
-import 'package:erisiti/src/features/screens/dashboard/features/receipts/modal/receipt.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ReceiptReport extends StatefulWidget {
-  const ReceiptReport({super.key});
+  const ReceiptReport({super.key, required this.receipts});
+  final List receipts;
 
   @override
   State<ReceiptReport> createState() => _ReceiptReportState();
@@ -15,9 +15,20 @@ class ReceiptReport extends StatefulWidget {
 class _ReceiptReportState extends State<ReceiptReport> {
   TextEditingController searchController = TextEditingController();
   ReceiptPageBloc receiptBloc = ReceiptPageBloc();
+  List? receipts;
+
+  @override
+  void initState() {
+    setState(() {
+      receipts = widget.receipts;
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ReceiptPageBloc, ReceiptPageState>(
+    return BlocConsumer<ReceiptPageBloc, ReceiptPageState>(
+      listener: (context, state) {},
       bloc: receiptBloc,
       builder: (context, state) {
         return Container(
@@ -27,7 +38,10 @@ class _ReceiptReportState extends State<ReceiptReport> {
             children: [
               TextFormField(
                 onChanged: (value) {
-                  receiptBloc.add(SearchReceiptEvent(query: value));
+                  if (receipts != null) {
+                    receiptBloc.add(
+                        SearchReceiptEvent(query: value, receipts: receipts!));
+                  }
                 },
                 decoration: InputDecoration(
                     focusedBorder: const OutlineInputBorder(
@@ -38,7 +52,7 @@ class _ReceiptReportState extends State<ReceiptReport> {
                         ? Padding(
                             padding: const EdgeInsets.all(15),
                             child: Text(
-                                "${(state).receipts.length}/${ReceiptHelper.receipts.length}"),
+                                "${(state).receipts.length}/${receipts!.length}"),
                           )
                         : null,
                     border: const OutlineInputBorder(
@@ -56,77 +70,93 @@ class _ReceiptReportState extends State<ReceiptReport> {
               SizedBox(
                 height: ApplicationStyles.getScreenHeight(context) * .01,
               ),
-              Expanded(
-                child: ListView.builder(
-                  itemCount: (state is ReceiptSearchState)
-                      ? (state).receipts.length
-                      : ReceiptHelper.receipts.length,
-                  itemBuilder: (context, index) {
-                    Receipt receipt = (state is ReceiptSearchState)
-                        ? (state).receipts[index]
-                        : ReceiptHelper.receipts[index];
-                    return Container(
-                      padding: const EdgeInsets.all(10),
-                      decoration: BoxDecoration(
-                          border: Border.all(
-                              color: ApplicationStyles.realAppColor)),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    const Text("issuer name:"),
-                                    (state is ReceiptSearchState)
-                                        ? Text.rich(ReceiptHelper().searchMatch(
-                                            receipt.issuer, (state).query))
-                                        : Text(receipt.issuer)
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    const Text("Address: "),
-                                    (state is ReceiptSearchState)
-                                        ? Text.rich(ReceiptHelper().searchMatch(
-                                            receipt.address, (state).query))
-                                        : Text(receipt.address)
-                                  ],
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: [
-                                    const Text("Phone Number: "),
-                                    (state is ReceiptSearchState)
-                                        ? Text.rich(ReceiptHelper().searchMatch(
-                                            receipt.phone, (state).query))
-                                        : Text(receipt.phone)
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                          IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.remove_red_eye_outlined,
-                                color: ApplicationStyles.realAppColor,
-                              ))
-                        ],
+              receipts == null
+                  ? const Center(
+                      child: CircularProgressIndicator(
+                        color: ApplicationStyles.realAppColor,
                       ),
-                    );
-                  },
-                ),
-              )
+                    )
+                  : Expanded(
+                      child: ListView.builder(
+                        itemCount: (state is ReceiptSearchState)
+                            ? (state).receipts.length
+                            : receipts!.length,
+                        itemBuilder: (context, index) {
+                          final receipt = (state is ReceiptSearchState)
+                              ? (state).receipts[index]
+                              : receipts![index];
+                          return Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: ApplicationStyles.realAppColor)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          const Text("Number: "),
+                                          (state is ReceiptSearchState)
+                                              ? Text.rich(ReceiptHelper()
+                                                  .searchMatch(
+                                                      receipt["receiptNumber"],
+                                                      (state).query))
+                                              : Text(receipt["receiptNumber"])
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          const Text("Amount: "),
+                                          (state is ReceiptSearchState)
+                                              ? Text.rich(ReceiptHelper()
+                                                  .searchMatch(
+                                                      receipt['amount']
+                                                          .toString(),
+                                                      (state).query))
+                                              : Text(
+                                                  receipt['amount'].toString())
+                                        ],
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        children: [
+                                          const Text("Tozo - Vat: "),
+                                          (state is ReceiptSearchState)
+                                              ? Text.rich(ReceiptHelper()
+                                                  .searchMatch(
+                                                      "${receipt['tozo']} ${receipt['vat']}",
+                                                      (state).query))
+                                              : Text(
+                                                  "${receipt['tozo']} - ${receipt['vat']}")
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.remove_red_eye_outlined,
+                                      color: ApplicationStyles.realAppColor,
+                                    ))
+                              ],
+                            ),
+                          );
+                        },
+                      ),
+                    )
             ],
           ),
         );

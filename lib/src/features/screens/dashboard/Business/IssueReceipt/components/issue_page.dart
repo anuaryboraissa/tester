@@ -8,10 +8,12 @@ class IssueBody extends StatefulWidget {
       {super.key,
       required this.itemName,
       required this.itemQuantity,
-      required this.itemAmount});
+      required this.itemAmount,
+      required this.products});
   final Function(String name) itemName;
   final Function(String quantity) itemQuantity;
   final Function(String amount) itemAmount;
+  final List products;
 
   @override
   State<IssueBody> createState() => _IssueBodyState();
@@ -36,10 +38,8 @@ class _IssueBodyState extends State<IssueBody>
 
   List items = [];
   getProducts() {
-    ProductHelper.getProducts().then((value) {
-      setState(() {
-        items = value[0]["businessProducts"];
-      });
+    setState(() {
+      items = widget.products;
     });
   }
 
@@ -85,7 +85,7 @@ class _IssueBodyState extends State<IssueBody>
                     items: items
                         .map((e) => DropdownMenuItem(
                               value: e['id'],
-                              child: Text(e['name']),
+                              child: Text(e['productName']),
                             ))
                         .toList(),
                     onChanged: (value) {
@@ -105,7 +105,7 @@ class _IssueBodyState extends State<IssueBody>
                           "${items.where((element) => element['id'] == value).single['price']} Tshs";
                       widget.itemName(items
                           .where((element) => element['id'] == value)
-                          .single['name']);
+                          .single['productName']);
                       widget.itemAmount(amount.text);
                       widget.itemQuantity(quantity.text);
                     },

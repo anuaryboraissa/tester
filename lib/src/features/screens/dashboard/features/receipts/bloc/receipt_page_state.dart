@@ -6,7 +6,7 @@ sealed class ReceiptPageState {}
 final class ReceiptPageInitial extends ReceiptPageState {}
 
 final class ReceiptSearchState extends ReceiptPageState {
-  final List<Receipt> receipts;
+  final List receipts;
   final String query;
   ReceiptSearchState(this.query, {required this.receipts});
 }

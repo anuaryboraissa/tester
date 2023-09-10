@@ -2,14 +2,14 @@ import "dart:convert";
 
 import "package:http/http.dart" as http;
 
-class FindBusinessesService {
-  static Future<Map> getBusinessByTin(String tinNumber) async {
+class FindBusinessReceiptsService {
+  static Future<Map> getBusinessReceiptsById(int businessId) async {
     try {
       var headers = {'Content-Type': 'application/json'};
       var result = http
-          .post(
+          .get(
               Uri.parse(
-                  "http://172.17.17.141:8081/api/v1/all-business-with-tin/$tinNumber"),
+                  "http://172.17.17.141:8081/api/v1/get-business-receipts/$businessId"),
               headers: headers)
           .then((value) {
         if (value.statusCode == 200) {

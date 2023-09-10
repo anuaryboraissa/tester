@@ -4,7 +4,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BusinessList extends StatelessWidget {
-  const BusinessList({super.key});
+  const BusinessList({super.key, required this.tinNumber});
+  final String tinNumber;
 
   @override
   Widget build(BuildContext context) {
@@ -12,34 +13,23 @@ class BusinessList extends StatelessWidget {
       appBar: AppBar(
         elevation: 0,
         backgroundColor: Colors.white,
-        title: Text(
+        title: const Text(
           "My Business",
           style: TextStyle(
               color: Colors.black, fontWeight: FontWeight.bold, fontSize: 21),
         ),
         actions: [
           IconButton(
-              onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const IssueReceiptPage(),
-                ));
-              },
+              onPressed: () {},
               icon: const Icon(
                 CupertinoIcons.add,
                 color: Color(0xFF0081A0),
               )),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              "issue",
-              style: TextStyle(
-                color: Color(0xFF0081A0),
-              ),
-            ),
-          )
         ],
       ),
-      body: UserBusinessListWidget(),
+      body: UserBusinessListWidget(
+        tinNumber: tinNumber,
+      ),
     );
   }
 }

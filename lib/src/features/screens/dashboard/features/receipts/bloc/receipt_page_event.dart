@@ -5,7 +5,11 @@ sealed class ReceiptPageEvent {}
 
 class SearchReceiptEvent extends ReceiptPageEvent {
   final String query;
-  SearchReceiptEvent({required this.query});
+  final List receipts;
+  SearchReceiptEvent({
+    required this.query,
+    required this.receipts
+  });
 }
 
 class ValidateDateEvent extends ReceiptPageEvent {

@@ -34,7 +34,9 @@ class _DashboardPageState extends State<DashboardPage> {
       pages.add(const MorePage());
       pages.add(const TipsHome());
       if (widget.loggedUser['userType'] == "BUSINESS") {
-        pages.add(const BusinessList());
+        pages.add(BusinessList(
+          tinNumber: widget.loggedUser['tinNumber'],
+        ));
       }
     });
 

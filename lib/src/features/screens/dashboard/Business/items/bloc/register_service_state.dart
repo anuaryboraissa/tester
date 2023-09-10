@@ -17,3 +17,40 @@ final class RegistrationProcessState extends RegisterServiceState {
 
   RegistrationProcessState(this.progress);
 }
+
+final class BusinessByTinState extends RegisterServiceState {
+  final List businesses;
+  final bool error;
+  final String message;
+
+  BusinessByTinState(this.businesses, this.error, this.message);
+}
+
+final class FindProductsByBusinessNumberState extends RegisterServiceState {
+  final List items;
+  final bool error;
+  final String message;
+
+  FindProductsByBusinessNumberState(this.items, this.error, this.message);
+}
+
+final class FindUserReceiptByTinState extends RegisterServiceState {
+  final List receipts;
+  final bool error;
+  final String message;
+  FindUserReceiptByTinState(this.receipts, this.error, this.message);
+}
+
+final class FindBusinessReceiptsByBusinessIdState extends RegisterServiceState {
+  final List receipts;
+  final bool error;
+  final String message;
+  FindBusinessReceiptsByBusinessIdState(
+      this.receipts, this.error, this.message);
+}
+
+final class GenerateReceiptState extends RegisterServiceState {
+  final bool generated;
+  final String message;
+  GenerateReceiptState(this.generated, this.message);
+}

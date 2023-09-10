@@ -5,12 +5,10 @@ import 'package:flutter/material.dart';
 class ProductWidget extends StatelessWidget {
   String productName;
   String productUnit;
-  String productCurrency;
   String productAmount;
   ProductWidget({
     required this.productName,
     required this.productUnit,
-    required this.productCurrency,
     required this.productAmount,
     super.key,
   });
@@ -35,15 +33,15 @@ class ProductWidget extends StatelessWidget {
                 children: [
                   Text(
                     productName,
-                    style: TextStyle(
+                    style: const TextStyle(
                         fontFamily: "Popins",
                         color: Color(0xFF0081A0),
                         fontSize: 21,
                         fontWeight: FontWeight.bold),
                   ),
                   Text(
-                    "$productUnit @ $productCurrency $productAmount/=",
-                    style: TextStyle(
+                    "$productUnit @ $productAmount/=",
+                    style: const TextStyle(
                         fontFamily: "Popins",
                         color: Colors.black,
                         fontSize: 14,
@@ -51,7 +49,7 @@ class ProductWidget extends StatelessWidget {
                   )
                 ],
               ),
-              Icon(
+              const Icon(
                 CupertinoIcons.backward,
                 color: Color(0xFF0081A0),
               )

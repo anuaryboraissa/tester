@@ -1,6 +1,11 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:erisiti/src/features/services/enpoints/create_receipt.dart';
+import 'package:erisiti/src/features/services/enpoints/get_business_receipt_id.dart';
+import 'package:erisiti/src/features/services/enpoints/get_businesses_by_tin.dart';
+import 'package:erisiti/src/features/services/enpoints/get_products_by_tin.dart';
+import 'package:erisiti/src/features/services/enpoints/get_user_receipt_by_tin.dart';
 import 'package:erisiti/src/features/services/enpoints/register_business.dart';
 import 'package:erisiti/src/features/services/enpoints/register_item.dart';
 import 'package:meta/meta.dart';
@@ -13,6 +18,12 @@ class RegisterServiceBloc
   RegisterServiceBloc() : super(RegisterServiceInitial()) {
     on<RegisterServiceEvent>(registerServiceEvent);
     on<RegisterBusinessEvent>(registerBusinessEvent);
+    on<FindBusinessEvent>(findBusinessEvent);
+    on<FindProductsByBusinessNumberEvent>(findProductsByBusinessNumberEvent);
+    on<FindUserReceiptByTinEvent>(findUserReceiptByTinEvent);
+    on<FindBusinessReceiptsByBusinessIdEvent>(
+        findBusinessReceiptsByBusinessIdEvent);
+    on<GenerateReceiptEvent>(generateReceiptEvent);
   }
 
   FutureOr<void> registerServiceEvent(
@@ -73,6 +84,73 @@ class RegisterServiceBloc
     }
     if (progress == 1.0) {
       emit(RegisterBusinessState("Successfully registered", true));
+    }
+  }
+
+  FutureOr<void> findBusinessEvent(
+      FindBusinessEvent event, Emitter<RegisterServiceState> emit) async {
+    final result = await FindBusinessesService.getBusinessByTin(
+        int.parse(event.tinNumber));
+    print(result);
+    if (result['code'] == 5000) {
+      emit(BusinessByTinState(result['data'], false, "Success"));
+    } else {
+      emit(BusinessByTinState(const [], true, result['message']));
+    }
+  }
+
+  FutureOr<void> findProductsByBusinessNumberEvent(
+      FindProductsByBusinessNumberEvent event,
+      Emitter<RegisterServiceState> emit) async {
+    final result = await FindProductsService.getProductsByBusinessNumber(
+        int.parse(event.businessNumber));
+    if (result['code'] == 5000) {
+      emit(FindProductsByBusinessNumberState(result['data'], false, "Success"));
+    } else {
+      emit(FindProductsByBusinessNumberState(
+          const [], true, result['messages']));
+    }
+  }
+
+  FutureOr<void> findUserReceiptByTinEvent(FindUserReceiptByTinEvent event,
+      Emitter<RegisterServiceState> emit) async {
+    final result = await FindUserReceiptService.getUserReceiptByTin(
+        int.parse(event.tinNumber));
+    if (result['code'] == 5000) {
+      emit(FindUserReceiptByTinState(result['data'], false, "Success"));
+    } else {
+      emit(FindUserReceiptByTinState(const [], true, result['messages']));
+    }
+  }
+
+  FutureOr<void> findBusinessReceiptsByBusinessIdEvent(
+      FindBusinessReceiptsByBusinessIdEvent event,
+      Emitter<RegisterServiceState> emit) async {
+    final result = await FindBusinessReceiptsService.getBusinessReceiptsById(
+        event.businessId);
+    if (result['code'] == 5000) {
+      emit(FindBusinessReceiptsByBusinessIdState(
+          result['data'], false, "Success"));
+    } else {
+      emit(FindBusinessReceiptsByBusinessIdState(
+          const [], true, result['messages']));
+    }
+  }
+
+  FutureOr<void> generateReceiptEvent(
+      GenerateReceiptEvent event, Emitter<RegisterServiceState> emit) async {
+    print("yeap ${event.item}");
+    final result = await GenerateReceiptService.generateReceipt(
+        event.item['amount'],
+        event.item['vat'],
+        event.item['tozo'],
+        event.item['businessId'],
+        event.item['tinNo'],
+        event.item['products']);
+    if (result['code'] == 5000) {
+      emit(GenerateReceiptState(true, result['message']));
+    } else {
+      emit(GenerateReceiptState(false, result['message']));
     }
   }
 }
