@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:erisiti/business/productList/widgets.dart/productWidget.dart';
 import 'package:erisiti/business/productList/widgets.dart/searchWidget.dart';
+import 'package:erisiti/business/viewReceipt/viewReciept.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
@@ -18,7 +19,6 @@ class _ProductListState extends State<ProductList> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     readJSON();
   }
@@ -29,7 +29,7 @@ class _ProductListState extends State<ProductList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: BackButton( color: const Color(0xFF0081A0)),
+        leading: const BackButton( color: Color(0xFF0081A0)),
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
@@ -98,7 +98,14 @@ class _ProductListState extends State<ProductList> {
                         endActionPane:
                             ActionPane(motion: const BehindMotion(), children: [
                           SlidableAction(
-                            onPressed: (context) {},
+                            onPressed: (context) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const ViewReciept(),
+                                )
+                              );
+                            },
                             backgroundColor: const Color(0xFF0081A0),
                             icon: Icons.more_horiz,
                             label: 'More',

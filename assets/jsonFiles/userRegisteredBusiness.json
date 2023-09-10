@@ -2,8 +2,12 @@
 
     {
         "businessID" : 0,
-        "businessName" : "OMEGA - ARUSHA",
         "businessBRELA": "002299",
+        "businessName" : "OMEGA - ARUSHA",
+        "businessAddress": "P. O. Box 1234",
+        "businessLocation" : "KIMBINYIKO",
+        "businessPhone": "+25577889900",
+        "businessEmail": "arusha@omega.com",
         "businessProducts" :[
             {
                 "name" : "Iphone 11",
