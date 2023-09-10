@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../../../../../business/viewReceipt/viewReciept.dart';
 import '../../../../../constants/styles/style.dart';
 import '../RegisterBusiness/components/top_bar.dart';
 import '../items/bloc/register_service_bloc.dart';
@@ -41,6 +42,11 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
           listener: (context, state) {
             if (state is GenerateReceiptState) {
               Fluttertoast.showToast(msg: state.message);
+              if (state.generated) {
+                Navigator.of(context).push(MaterialPageRoute(
+                  builder: (context) => const ViewReciept(),
+                ));
+              }
             }
           },
           builder: (context, state) {

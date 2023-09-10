@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'package:erisiti/business/productList/widgets.dart/productWidget.dart';
 import 'package:erisiti/business/productList/widgets.dart/searchWidget.dart';
-import 'package:erisiti/src/constants/styles/style.dart';
-import 'package:erisiti/src/features/screens/dashboard/Business/items/bloc/register_service_bloc.dart';
-import 'package:erisiti/src/features/services/enpoints/register_business.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
@@ -11,7 +8,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import '../../src/constants/styles/style.dart';
 import '../../src/features/screens/dashboard/Business/IssueReceipt/issue.dart';
+import '../../src/features/screens/dashboard/Business/items/bloc/register_service_bloc.dart';
 
 class ProductList extends StatefulWidget {
   final String businessName;
@@ -44,7 +43,7 @@ class _ProductListState extends State<ProductList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: Color(0xFF0081A0)),
+        leading: const BackButton(color: const Color(0xFF0081A0)),
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
@@ -99,21 +98,16 @@ class _ProductListState extends State<ProductList> {
         listener: (context, state) {
           if (state is FindProductsByBusinessNumberState) {
             theProductList = state.items;
-            if (state.error) {
-              Fluttertoast.showToast(msg: state.message);
-            }
           }
         },
         builder: (context, state) {
           return theProductList == null
               ? const Center(
-                  child: CircularProgressIndicator(
-                    color: ApplicationStyles.realAppColor,
-                  ),
+                  child: CircularProgressIndicator(),
                 )
               : theProductList!.isEmpty
                   ? const Center(
-                      child: Text("No products"),
+                      child: Text("No data is available"),
                     )
                   : Column(
                       children: [
@@ -144,7 +138,7 @@ class _ProductListState extends State<ProductList> {
                                   : theProductList![index];
                               return Slidable(
                                 startActionPane: ActionPane(
-                                    motion: StretchMotion(),
+                                    motion: const StretchMotion(),
                                     children: [
                                       SlidableAction(
                                         onPressed: (context) {},

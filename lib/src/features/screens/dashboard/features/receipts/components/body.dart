@@ -1,3 +1,4 @@
+import 'package:erisiti/business/viewReceipt/viewReciept.dart';
 import 'package:erisiti/src/constants/styles/style.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/receipts/bloc/receipt_page_bloc.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/receipts/modal/helper.dart';
@@ -146,7 +147,13 @@ class _ReceiptReportState extends State<ReceiptReport> {
                                   ],
                                 ),
                                 IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.of(context)
+                                          .push(MaterialPageRoute(
+                                        builder: (context) =>
+                                            const ViewReciept(),
+                                      ));
+                                    },
                                     icon: const Icon(
                                       Icons.remove_red_eye_outlined,
                                       color: ApplicationStyles.realAppColor,

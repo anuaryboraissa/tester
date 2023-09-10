@@ -1,11 +1,13 @@
 [
     {
         "name": "OMEGA - DODOMA",
-        "registration_number": "001100"
+        "registration_number": "001100",
+        "location" : "KIMBINYIKO"
     },
     {
         "name": "OMEGA - ARUSHA",
-        "registration_number": "001101"
+        "registration_number": "001101",
+        "location" : "KALOLENI"
     },
     {
         "name": "OMEGA - MBEYA",
