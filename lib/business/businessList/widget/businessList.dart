@@ -17,8 +17,11 @@ class UserBusinessListWidget extends StatefulWidget {
   const UserBusinessListWidget({
     super.key,
     required this.tinNumber,
+    required this.businessBloc,
   });
   final String tinNumber;
+
+  final Function(RegisterServiceBloc bloc) businessBloc;
   @override
   State<UserBusinessListWidget> createState() => _UserBusinessListWidgetState();
 }
@@ -28,6 +31,7 @@ class _UserBusinessListWidgetState extends State<UserBusinessListWidget> {
   @override
   void initState() {
     // readJSON();
+    widget.businessBloc(bloc);
     bloc.add(FindBusinessEvent(widget.tinNumber));
     super.initState();
   }
@@ -95,6 +99,7 @@ class _UserBusinessListWidgetState extends State<UserBusinessListWidget> {
                                               businessRegNumber: businesses[
                                                   'businessRegistrationNumber'],
                                               businessId: businesses['id'],
+                                              businessMap: businesses,
                                             )));
                               },
                               child: BusinessWidget(

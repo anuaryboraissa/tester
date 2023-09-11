@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:erisiti/business/productList/widgets.dart/productWidget.dart';
 import 'package:erisiti/business/productList/widgets.dart/searchWidget.dart';
+import 'package:erisiti/src/features/screens/dashboard/Business/items/register.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
@@ -18,9 +19,11 @@ class ProductList extends StatefulWidget {
       {super.key,
       required this.businessName,
       required this.businessRegNumber,
-      required this.businessId});
+      required this.businessId,
+      required this.businessMap});
   final String businessRegNumber;
   final int businessId;
+  final Map<String, dynamic> businessMap;
 
   @override
   State<ProductList> createState() => _ProductListState();
@@ -54,15 +57,25 @@ class _ProductListState extends State<ProductList> {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                  builder: (context) => ItemRegisterPage(
+                    business: widget.businessName,
+                    savedProducts: (products) {},
+                    businessId: widget.businessId,
+                    removeItem: (businessId, itemId) {},
+                    businessMap: widget.businessMap,
+                    initially: false,
+                  ),
+                ))
+                    .then((value) {
+                  bloc.add(FindProductsByBusinessNumberEvent(
+                      widget.businessRegNumber));
+                });
+              },
               icon: const Icon(
                 CupertinoIcons.add,
-                color: Color(0xFF0081A0),
-              )),
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.receipt,
                 color: Color(0xFF0081A0),
               )),
           PopupMenuButton<String>(
@@ -183,20 +196,20 @@ class _ProductListState extends State<ProductList> {
   String businessName = "OMEGA - DAR";
   List<dynamic> ownerBusinesses = [];
   List<dynamic>? theProductList;
-  Future<void> readJSON() async {
-    final String theFileWithJSONData = await rootBundle.rootBundle
-        .loadString('assets/jsonFiles/userRegisteredBusiness.json');
-    final capturedJSONData = await json.decode(theFileWithJSONData);
-    setState(() {
-      ownerBusinesses = capturedJSONData;
-    });
-    // theProductList = ownerBusinesses[widget.businessID]['businessProducts'];
-    theProductList = ownerBusinesses
-        .where((element) =>
-            element['businessName'].toString().contains(widget.businessName))
-        .toList();
-    theProductList = theProductList![0]['businessProducts'];
-  }
+  // Future<void> readJSON() async {
+  //   final String theFileWithJSONData = await rootBundle.rootBundle
+  //       .loadString('assets/jsonFiles/userRegisteredBusiness.json');
+  //   final capturedJSONData = await json.decode(theFileWithJSONData);
+  //   setState(() {
+  //     ownerBusinesses = capturedJSONData;
+  //   });
+  //   // theProductList = ownerBusinesses[widget.businessID]['businessProducts'];
+  //   theProductList = ownerBusinesses
+  //       .where((element) =>
+  //           element['businessName'].toString().contains(widget.businessName))
+  //       .toList();
+  //   theProductList = theProductList![0]['businessProducts'];
+  // }
 
   bool searching = false;
 

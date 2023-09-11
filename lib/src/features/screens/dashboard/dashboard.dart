@@ -47,22 +47,15 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        body: pages[currentPageValue],
-        bottomNavigationBar: BottomNavigation(
-          currentPage: (currentPage) {
-            setState(() {
-              currentPageValue = currentPage;
-            });
-          },
-          userType: widget.loggedUser['userType'],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            TesterApp.analyze();
-          },
-          child: const Icon(Icons.add),
-        ),
-      ),
+          body: pages[currentPageValue],
+          bottomNavigationBar: BottomNavigation(
+            currentPage: (currentPage) {
+              setState(() {
+                currentPageValue = currentPage;
+              });
+            },
+            userType: widget.loggedUser['userType'],
+          )),
     );
   }
 }

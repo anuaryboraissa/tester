@@ -37,6 +37,12 @@ class _HomeTopBarState extends State<HomeTopBar>
   }
 
   @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomeBloc, HomeState>(
       bloc: widget.homeBloc,

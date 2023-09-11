@@ -21,8 +21,8 @@ class CreateAccount extends StatefulWidget {
 class _CreateAccountState extends State<CreateAccount> {
   final _accountChoices = [
     "Tap to Choose Account",
-    "User",
-    "Business",
+    "CUSTOMER",
+    "BUSINESS",
   ];
   String? _selectedAccount = "";
   _CreateAccountState() {
@@ -116,7 +116,7 @@ class _CreateAccountState extends State<CreateAccount> {
               phoneValid = null;
               fullNameValid = null;
               //
-              if (state.userType == "Business") {
+              if (state.userType == "BUSINESS") {
                 navigate(WelcomePage(
                   tinNumber: state.tinNumber,
                 ));

@@ -1,5 +1,7 @@
+import 'package:erisiti/src/features/screens/dashboard/Business/items/bloc/register_service_bloc.dart';
 import 'package:erisiti/src/features/screens/dashboard/Business/items/components/add_item_body.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import '../../../../../constants/styles/style.dart';
@@ -12,13 +14,16 @@ class ItemRegisterPage extends StatefulWidget {
       required this.savedProducts,
       required this.businessId,
       required this.removeItem,
-      required this.businessMap});
+      required this.businessMap,
+      required this.initially});
   final String business;
   final int businessId;
   final Function(Map<String, dynamic> products) savedProducts;
   final Function(int businessId, int itemId) removeItem;
 
   final Map<String, dynamic> businessMap;
+
+  final bool initially;
 
   @override
   State<ItemRegisterPage> createState() => _ItemRegisterPageState();
@@ -36,36 +41,52 @@ class _ItemRegisterPageState extends State<ItemRegisterPage> {
 
   List<Map<String, dynamic>> saved = [];
 
+  RegisterServiceBloc bloc = RegisterServiceBloc();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-            children: [
-              BusinessTopBar(
-                  title: "Products",
-                  image: "assets/images/product.png",
-                  subTitle: "${widget.business} Products"),
-              contentHolder(),
-              if (addProduct)
-                RegisterItemBody(
-                  itemName: (name) {
-                    itemName = name;
-                  },
-                  itemUnit: (unit) {
-                    this.unit = unit;
-                  },
-                  itemPrice: (price) {
-                    this.price = price;
-                  },
-                  itemCurrency: (String currency) {
-                    this.currency = currency;
-                  },
-                  acceptDecimal: (bool decimal) {
-                    acceptDecimal = decimal;
-                  },
-                )
-            ],
+          child: BlocConsumer<RegisterServiceBloc, RegisterServiceState>(
+            bloc: bloc,
+            listener: (context, state) {
+              if (state is AddBusinessItemState) {
+                Fluttertoast.showToast(msg: state.message);
+                if (state.registered) {
+                  // print("registered");
+                  Navigator.of(context).pop();
+                }
+              }
+            },
+            builder: (context, state) {
+              return Column(
+                children: [
+                  BusinessTopBar(
+                      title: "Products",
+                      image: "assets/images/product.png",
+                      subTitle: "${widget.business} Products"),
+                  contentHolder(),
+                  if (addProduct)
+                    RegisterItemBody(
+                      itemName: (name) {
+                        itemName = name;
+                      },
+                      itemUnit: (unit) {
+                        this.unit = unit;
+                      },
+                      itemPrice: (price) {
+                        this.price = price;
+                      },
+                      itemCurrency: (String currency) {
+                        this.currency = currency;
+                      },
+                      acceptDecimal: (bool decimal) {
+                        acceptDecimal = decimal;
+                      },
+                    )
+                ],
+              );
+            },
           ),
         ),
         bottomNavigationBar: Padding(
@@ -79,7 +100,12 @@ class _ItemRegisterPageState extends State<ItemRegisterPage> {
               onPressed: addProduct || items.isEmpty
                   ? null
                   : () {
-                      Navigator.of(context).pop();
+                      if (widget.initially) {
+                        Navigator.of(context).pop();
+                      } else {
+                        //save specifically
+                        bloc.add(AddBusinessItemEvent(items));
+                      }
                     },
               child: const Text("Save Items")),
         ),
@@ -120,7 +146,10 @@ class _ItemRegisterPageState extends State<ItemRegisterPage> {
                         "unit": unit,
                         "price": price,
                         "acceptDecimal": acceptDecimal,
-                        "id": items.length + 1
+                        "id": items.length + 1,
+                        "businessRegNumber":
+                            widget.businessMap['registrationNumber'] ??
+                                widget.businessMap['businessRegistrationNumber']
                       };
                       items.add(item);
                       Map<String, dynamic> businessProducts = {
@@ -128,8 +157,9 @@ class _ItemRegisterPageState extends State<ItemRegisterPage> {
                         "businessName": widget.businessMap['name'],
                         "businessRegion": widget.businessMap['region'],
                         "businessDistrict": widget.businessMap['district'],
-                        "businessRegistrationNumber":widget.businessMap['registrationNumber'],
-                        "businessTinNumber":widget.businessMap['tinNumber'],
+                        "businessRegistrationNumber":
+                            widget.businessMap['registrationNumber'],
+                        "businessTinNumber": widget.businessMap['tinNumber'],
                         "products": [item]
                       };
                       widget.savedProducts(businessProducts);

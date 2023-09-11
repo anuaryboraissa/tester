@@ -150,8 +150,9 @@ class _ReceiptReportState extends State<ReceiptReport> {
                                     onPressed: () {
                                       Navigator.of(context)
                                           .push(MaterialPageRoute(
-                                        builder: (context) =>
-                                            const ViewReciept(),
+                                        builder: (context) => ViewReciept(
+                                          receiptGenerated: receipt,
+                                        ),
                                       ));
                                     },
                                     icon: const Icon(

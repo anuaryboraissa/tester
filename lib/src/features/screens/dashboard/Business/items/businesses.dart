@@ -10,7 +10,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../../../constants/styles/style.dart';
 
 class RegisteredBusiness extends StatefulWidget {
-  const RegisteredBusiness({super.key, required this.businesses});
+  const RegisteredBusiness(
+      {super.key, required this.businesses, required this.initially});
+  final bool initially;
 
   final List<Map<String, dynamic>> businesses;
 
@@ -40,12 +42,19 @@ class _RegisteredBusinessState extends State<RegisteredBusiness> {
             submited = false;
             Fluttertoast.showToast(msg: state.message);
             if (state.registered) {
-              Navigator.of(context).popUntil((route) => route.isFirst);
-              Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const Login(),
-                  ));
+              print("state registered ${state.registered}");
+              if (widget.initially) {
+                Navigator.of(context).popUntil((route) => route.isFirst);
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const Login(),
+                    ));
+              } else {
+                print("state pop");
+                Navigator.pop(context);
+                Navigator.pop(context);
+              }
             }
           }
         },
@@ -121,6 +130,7 @@ class _RegisteredBusinessState extends State<RegisteredBusiness> {
                             print(savedProducts);
                           },
                           businessMap: business,
+                          initially: true,
                         ),
                       ));
                     },

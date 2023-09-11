@@ -78,8 +78,7 @@ class _WelcomePageState extends State<WelcomePage> {
               onPressed: () {
                 Navigator.of(context).push(MaterialPageRoute(
                   builder: (context) => RegisterBusiness(
-                    tinNumber: widget.tinNumber,
-                  ),
+                      tinNumber: widget.tinNumber, initially: true),
                 ));
               },
               child: const Text("Let's get started")),

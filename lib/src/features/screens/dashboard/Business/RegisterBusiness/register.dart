@@ -9,8 +9,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import '../../../../../constants/styles/style.dart';
 
 class RegisterBusiness extends StatefulWidget {
-  const RegisterBusiness({super.key, required this.tinNumber});
+  const RegisterBusiness(
+      {super.key, required this.tinNumber, required this.initially});
   final String tinNumber;
+  final bool initially;
   @override
   State<RegisterBusiness> createState() => _RegisterBusinessState();
 }
@@ -81,6 +83,7 @@ class _RegisterBusinessState extends State<RegisterBusiness> {
                       Navigator.of(context).push(MaterialPageRoute(
                         builder: (context) => RegisteredBusiness(
                           businesses: businesses,
+                          initially: widget.initially,
                         ),
                       ));
                     },

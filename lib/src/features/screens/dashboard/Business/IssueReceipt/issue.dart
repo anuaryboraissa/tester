@@ -30,8 +30,13 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
   String vat = "0.18";
   double totalTozo = 0.0;
   double totalAmount = 0.0;
+  int tinNumberLength = 0;
 
   TextEditingController tinNumber = TextEditingController();
+  TextEditingController fullName = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController discount = TextEditingController();
+
   RegisterServiceBloc bloc = RegisterServiceBloc();
   @override
   Widget build(BuildContext context) {
@@ -43,8 +48,18 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
             if (state is GenerateReceiptState) {
               Fluttertoast.showToast(msg: state.message);
               if (state.generated) {
+                bloc.add(FindReceiptByNumberEvent(state.receiptNumber));
+              }
+            } else if (state is FindReceiptByNumberState) {
+              Fluttertoast.showToast(msg: state.message);
+              if (state.exist) {
+                itemsAdded.clear();
+                addItem = false;
+                tinNumber.clear();
                 Navigator.of(context).push(MaterialPageRoute(
-                  builder: (context) => const ViewReciept(),
+                  builder: (context) => ViewReciept(
+                    receiptGenerated: state.receipt,
+                  ),
                 ));
               }
             }
@@ -74,6 +89,9 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
                       // widget.businessName(value);
+                      setState(() {
+                        tinNumberLength = value.trim().length;
+                      });
                     },
                     decoration: const InputDecoration(
                         hintText: "Tin Number (Optional)",
@@ -86,6 +104,7 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 18.0, right: 18, top: 8),
                   child: TextField(
+                    controller: fullName,
                     onChanged: (value) {
                       // widget.businessName(value);
                     },
@@ -100,12 +119,29 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 18.0, right: 18, top: 8),
                   child: TextField(
+                    controller: phone,
                     keyboardType: TextInputType.number,
                     onChanged: (value) {
                       // widget.businessName(value);
                     },
                     decoration: const InputDecoration(
                         hintText: "Phone number",
+                        contentPadding: EdgeInsets.all(20),
+                        border: OutlineInputBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(10)))),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 18.0, right: 18, top: 8),
+                  child: TextField(
+                    controller: discount,
+                    keyboardType: TextInputType.number,
+                    onChanged: (value) {
+                      // widget.businessName(value);
+                    },
+                    decoration: const InputDecoration(
+                        hintText: "% Discount (Optional)",
                         contentPadding: EdgeInsets.all(20),
                         border: OutlineInputBorder(
                             borderRadius:
@@ -152,7 +188,10 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
                 backgroundColor: ApplicationStyles.realAppColor),
-            onPressed: itemsAdded.isNotEmpty && !addItem
+            onPressed: itemsAdded.isNotEmpty &&
+                    !addItem &&
+                    tinNumber.text.isNotEmpty &&
+                    tinNumber.text.length == 9
                 ? () {
                     Map<String, dynamic> finalProduct = {
                       "amount": totalAmount - (double.parse(vat) * totalAmount),

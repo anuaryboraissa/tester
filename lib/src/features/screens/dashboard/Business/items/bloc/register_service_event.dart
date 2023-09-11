@@ -37,3 +37,15 @@ final class GenerateReceiptEvent extends RegisterServiceEvent {
 
   GenerateReceiptEvent(this.item);
 }
+
+final class FindReceiptByNumberEvent extends RegisterServiceEvent {
+  final String receiptNumber;
+
+  FindReceiptByNumberEvent(this.receiptNumber);
+}
+
+final class AddBusinessItemEvent extends RegisterServiceEvent {
+  final List<Map<String, dynamic>> products;
+
+  AddBusinessItemEvent(this.products);
+}

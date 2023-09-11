@@ -52,5 +52,21 @@ final class FindBusinessReceiptsByBusinessIdState extends RegisterServiceState {
 final class GenerateReceiptState extends RegisterServiceState {
   final bool generated;
   final String message;
-  GenerateReceiptState(this.generated, this.message);
+  final String receiptNumber;
+  GenerateReceiptState(this.generated, this.message, this.receiptNumber);
+}
+
+final class FindReceiptByNumberState extends RegisterServiceState {
+  final Map receipt;
+  final bool exist;
+  final String message;
+
+  FindReceiptByNumberState(this.receipt, this.exist, this.message);
+}
+
+final class AddBusinessItemState extends RegisterServiceState {
+  final String message;
+  final bool registered;
+
+  AddBusinessItemState(this.message, this.registered);
 }

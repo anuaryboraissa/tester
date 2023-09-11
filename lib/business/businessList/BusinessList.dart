@@ -1,12 +1,22 @@
 import 'package:erisiti/business/businessList/widget/businessList.dart';
-import 'package:erisiti/src/features/screens/dashboard/Business/IssueReceipt/issue.dart';
+
+import 'package:erisiti/src/features/screens/dashboard/Business/RegisterBusiness/register.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class BusinessList extends StatelessWidget {
+import '../../src/features/screens/dashboard/Business/items/bloc/register_service_bloc.dart';
+
+class BusinessList extends StatefulWidget {
   const BusinessList({super.key, required this.tinNumber});
   final String tinNumber;
 
+  @override
+  State<BusinessList> createState() => _BusinessListState();
+}
+
+RegisterServiceBloc myBloc = RegisterServiceBloc();
+
+class _BusinessListState extends State<BusinessList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +30,16 @@ class BusinessList extends StatelessWidget {
         ),
         actions: [
           IconButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
+                  builder: (context) => RegisterBusiness(
+                      tinNumber: widget.tinNumber, initially: false),
+                ))
+                    .then((value) {
+                  myBloc.add(FindBusinessEvent(widget.tinNumber));
+                });
+              },
               icon: const Icon(
                 CupertinoIcons.add,
                 color: Color(0xFF0081A0),
@@ -28,7 +47,10 @@ class BusinessList extends StatelessWidget {
         ],
       ),
       body: UserBusinessListWidget(
-        tinNumber: tinNumber,
+        tinNumber: widget.tinNumber,
+        businessBloc: (RegisterServiceBloc bloc) {
+          myBloc = bloc;
+        },
       ),
     );
   }
