@@ -35,7 +35,7 @@ final class FindProductsByBusinessNumberState extends RegisterServiceState {
 }
 
 final class FindUserReceiptByTinState extends RegisterServiceState {
-  final List receipts;
+  final Map<String, dynamic> receipts;
   final bool error;
   final String message;
   FindUserReceiptByTinState(this.receipts, this.error, this.message);

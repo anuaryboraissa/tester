@@ -136,9 +136,23 @@ class RegisterServiceBloc
     final result = await FindUserReceiptService.getUserReceiptByTin(
         int.parse(event.tinNumber));
     if (result['code'] == 5000) {
-      emit(FindUserReceiptByTinState(result['data'], false, "Success"));
+      List receipts = result['data'];
+      double taxAmount = 0.0;
+      double totalAmount = 0.0;
+      int totalReceipts = receipts.length;
+      receipts.forEach((element) {
+        taxAmount = element['tozo'] + taxAmount;
+        totalAmount = element['amount'] + totalAmount;
+      });
+      Map<String, dynamic> receiptOverview = {
+        "totalReceipts": totalReceipts,
+        "taxAmount": taxAmount,
+        "totalAmount": totalAmount,
+        "receipts": receipts
+      };
+      emit(FindUserReceiptByTinState(receiptOverview, false, "Success"));
     } else {
-      emit(FindUserReceiptByTinState(const [], true, result['messages']));
+      emit(FindUserReceiptByTinState(const {}, true, result['messages']));
     }
   }
 

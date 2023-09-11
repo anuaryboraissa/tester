@@ -18,6 +18,12 @@ List<Map<String, dynamic>> brela = [
     "vat": "0.18"
   },
   {
+    "businessRegNumber": "777799",
+    "address": {"region": "Tanga", "district": "Muheza"},
+    "tinNumber": "536423740", //Issa12345!@
+    "vat": "0.18"
+  },
+  {
     "businessRegNumber": "445566",
     "address": {"region": "Tanga", "district": "Muheza"},
     "tinNumber": "536423740", //Issa12345!@

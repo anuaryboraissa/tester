@@ -5,10 +5,12 @@ import 'package:erisiti/src/features/screens/dashboard/features/home/components/
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../Business/items/bloc/register_service_bloc.dart';
+
 class HomeBody extends StatefulWidget {
   const HomeBody({super.key, required this.homeBloc, required this.tinNumber});
   final String tinNumber;
-  final HomeBloc homeBloc;
+  final RegisterServiceBloc homeBloc;
 
   @override
   State<HomeBody> createState() => _HomeBodyState();
@@ -21,25 +23,25 @@ class _HomeBodyState extends State<HomeBody> {
 
   @override
   void initState() {
-    widget.homeBloc.add(HomeInitializeEvent(widget.tinNumber));
+    widget.homeBloc.add(FindUserReceiptByTinEvent(widget.tinNumber));
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<HomeBloc, HomeState>(
+    return BlocConsumer<RegisterServiceBloc, RegisterServiceState>(
       bloc: widget.homeBloc,
       listener: (context, state) {
-        if (state is HomeInitializeState) {
-          numberOfReceipts = state.numberOfReceipts;
-          totalAmount = state.totalAmount;
-          taxAmount = state.taxAmount;
+        if (state is FindUserReceiptByTinState) {
+          numberOfReceipts = state.receipts['totalReceipts'].toString();
+          totalAmount = state.receipts['totalAmount'].toString();
+          taxAmount = state.receipts['taxAmount'].toString();
         }
       },
       builder: (context, state) {
-        return (state is! HomeInitializeState)
+        return (state is! FindUserReceiptByTinState)
             ? const CircularProgressIndicator()
-            : state.networkActive
+            : !state.error
                 ? Container(
                     margin: const EdgeInsets.only(left: 15, right: 15),
                     child: Column(
@@ -88,8 +90,8 @@ class _HomeBodyState extends State<HomeBody> {
                         ),
                         TextButton(
                             onPressed: () {
-                              widget.homeBloc
-                                  .add(HomeInitializeEvent(widget.tinNumber));
+                              // widget.homeBloc
+                              //     .add(HomeInitializeEvent(widget.tinNumber));
                             },
                             child: const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
