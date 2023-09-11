@@ -56,11 +56,19 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
                 itemsAdded.clear();
                 addItem = false;
                 tinNumber.clear();
-                Navigator.of(context).push(MaterialPageRoute(
+                Navigator.of(context)
+                    .push(MaterialPageRoute(
                   builder: (context) => ViewReciept(
                     receiptGenerated: state.receipt,
                   ),
-                ));
+                ))
+                    .then((value) {
+                  setState(() {
+                    itemsAdded.clear();
+                    addItem = false;
+                    tinNumber.clear();
+                  });
+                });
               }
             }
           },

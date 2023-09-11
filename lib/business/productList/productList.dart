@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:erisiti/business/productList/widgets.dart/productWidget.dart';
 import 'package:erisiti/business/productList/widgets.dart/searchWidget.dart';
 import 'package:erisiti/src/features/screens/dashboard/Business/items/register.dart';
+import 'package:erisiti/src/features/screens/dashboard/features/receipts/receipt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
@@ -41,12 +42,19 @@ class _ProductListState extends State<ProductList> {
   RegisterServiceBloc bloc = RegisterServiceBloc();
 
   List<String> categories = ["issue", "receipts"];
+  List businessReceipts = [];
+
+  int totalReceipts = 0;
+  double taxAmount = 0.0;
+  double totalAmount = 0.0;
+
+  Map receiptOverview = {};
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: const BackButton(color: const Color(0xFF0081A0)),
+        leading: const BackButton(color: Color(0xFF0081A0)),
         elevation: 0,
         backgroundColor: Colors.white,
         title: Text(
@@ -82,15 +90,28 @@ class _ProductListState extends State<ProductList> {
             onSelected: (value) {
               if (value == "issue") {
                 if (theProductList != null) {
-                  Navigator.of(context).push(MaterialPageRoute(
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(
                     builder: (context) => IssueReceiptPage(
                       businessId: widget.businessId,
                       products: theProductList!,
                       businessName: widget.businessName,
                     ),
-                  ));
+                  ))
+                      .then((value) {
+                    bloc.add(FindBusinessReceiptsByBusinessIdEvent(
+                        widget.businessId));
+                  });
                 }
-              } else if (value == "receipts") {}
+              } else if (value == "receipts") {
+                if (receiptOverview.isNotEmpty) {
+                  Navigator.of(context).push(MaterialPageRoute(
+                    builder: (context) =>
+                        ReceiptPage(receiptsOverview: receiptOverview),
+                  ));
+                  ;
+                }
+              }
             },
             icon: const Icon(
               Icons.more_vert,
@@ -111,6 +132,30 @@ class _ProductListState extends State<ProductList> {
         listener: (context, state) {
           if (state is FindProductsByBusinessNumberState) {
             theProductList = state.items;
+            bloc.add(FindBusinessReceiptsByBusinessIdEvent(widget.businessId));
+          } else if (state is FindBusinessReceiptsByBusinessIdState) {
+            if (state.error) {
+              Fluttertoast.showToast(msg: state.message);
+            } else {
+              businessReceipts = state.receipts;
+              totalReceipts = businessReceipts.length;
+
+              businessReceipts.forEach((element) {
+                print("s 2");
+                taxAmount = element['tozo'] + taxAmount;
+                print("s kn");
+                totalAmount = element['amount'] + totalAmount;
+                print("s k");
+              });
+
+              receiptOverview = {
+                "totalReceipts": totalReceipts,
+                "taxAmount": taxAmount,
+                "totalAmount": totalAmount,
+                "receipts": businessReceipts
+              };
+              Fluttertoast.showToast(msg: "Overview");
+            }
           }
         },
         builder: (context, state) {
