@@ -64,7 +64,7 @@ class _ViewRecieptState extends State<ViewReciept> {
                       ),
                       Text(
                           userInformation[index]['userVRN'].toString() == "null"
-                              ? "VRN *NOTREGISTERED*"
+                              ? "VRN *NOT REGISTERED*"
                               : userInformation[index]['userVRN'].toString()),
                       const HorizontalLine(),
                       RowMaker(
@@ -105,9 +105,51 @@ class _ViewRecieptState extends State<ViewReciept> {
                                       1,
                                   "")),
                       const HorizontalLine(),
-                      RowMaker(JSONKey: "Item's Name", JSONValue: "null"),
-                      RowMaker(JSONKey: "Item's Quantity", JSONValue: "null"),
-                      RowMaker(JSONKey: "Item's Amount", JSONValue: "null"),
+                      const Padding(
+                        padding: EdgeInsets.all(8),
+                        child: Text("Items"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8),
+                        child: Table(
+                            // defaultColumnWidth: const FixedColumnWidth(120.0),
+                            border: TableBorder.all(
+                              color: Colors.black,
+                              style: BorderStyle.solid,
+                              width: 2,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            children: (widget
+                                        .receiptGenerated['receiptProducts']
+                                    as List)
+                                .map((e) => TableRow(children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Text(e['id'].toString()),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Text(e['productName'].toString()),
+                                          ],
+                                        ),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          children: [
+                                            Text(e['amount'].toString()),
+                                          ],
+                                        ),
+                                      ),
+                                    ]))
+                                .toList()),
+                      ),
                       const HorizontalLine(),
                       RowMaker(
                           JSONKey: "Total Amount TAX excluded",

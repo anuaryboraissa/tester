@@ -66,6 +66,18 @@ List<Map<String, dynamic>> brela = [
     "vat": "0.18"
   },
   {
+    "businessRegNumber": " 551115",
+    "address": {"region": "Manyara", "district": "Simanjiro"},
+    "tinNumber": "455110110",
+    "vat": "0.18"
+  },
+  {
+    "businessRegNumber": "661110",
+    "address": {"region": "Manyara", "district": "Simanjiro"},
+    "tinNumber": "666666611",
+    "vat": "0.18"
+  },
+  {
     "businessRegNumber": "877754",
     "address": {"region": "Dar", "district": "Temeke"},
     "tinNumber": "987654321",
