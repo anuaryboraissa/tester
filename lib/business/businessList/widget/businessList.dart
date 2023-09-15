@@ -3,6 +3,7 @@
 import 'dart:convert';
 import 'package:erisiti/business/productList/productList.dart';
 import 'package:erisiti/src/constants/styles/style.dart';
+import 'package:erisiti/src/features/services/database/modalHelpers/business_helper.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
@@ -47,6 +48,34 @@ class _UserBusinessListWidgetState extends State<UserBusinessListWidget> {
           businessInfo = state.businesses;
           if (state.error) {
             Fluttertoast.showToast(msg: state.message);
+            if (state.message == "Network is unreachable") {
+              //offline access
+
+              BusinessHelper().queryAll().then((value) {
+                setState(() {
+                  businessInfo = value.map((e) {
+                    return {
+                      "id": e!.id,
+                      "createdAt": e.createdAt,
+                      "updatedAt": e.updatedAt,
+                      "createdBy": e.createdBy,
+                      "updatedBy": e.updatedBy,
+                      "deleted": e.deleted,
+                      "active": e.active,
+                      "uuid": e.uuid,
+                      "businessName": e.businessName,
+                      "region": e.region,
+                      "district": e.district,
+                      "tinNo": e.tinNumber,
+                      "businessRegistrationNumber": e.businessRegNumber,
+                      "businessType": e.businessType
+                    };
+                  }).toList();
+                });
+
+                print("offline access $businessInfo");
+              });
+            }
           }
         }
       },
@@ -117,14 +146,14 @@ class _UserBusinessListWidgetState extends State<UserBusinessListWidget> {
   }
 
   List<dynamic>? businessInfo;
-  Future<void> readJSON() async {
-    final String theFileWithJSONData = await rootBundle.rootBundle
-        .loadString('assets/jsonFiles/userRegisteredBusiness.json');
-    final capturedJSONData = await json.decode(theFileWithJSONData);
-    setState(() {
-      businessInfo = capturedJSONData;
-    });
-  }
+  // Future<void> readJSON() async {
+  //   final String theFileWithJSONData = await rootBundle.rootBundle
+  //       .loadString('assets/jsonFiles/userRegisteredBusiness.json');
+  //   final capturedJSONData = await json.decode(theFileWithJSONData);
+  //   setState(() {
+  //     businessInfo = capturedJSONData;
+  //   });
+  // }
 
   bool searching = false;
   List<dynamic> searchBusiness(String businessName) {
