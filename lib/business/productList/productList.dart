@@ -41,8 +41,6 @@ class _ProductListState extends State<ProductList> {
   void initState() {
     bloc.add(FindProductsByBusinessNumberEvent(widget.businessRegNumber));
     super.initState();
-    // readJSON();
-
     LoginUserHelper().queryById(1).then((value) {
       setState(() {
         loginUser = value;
@@ -185,32 +183,11 @@ class _ProductListState extends State<ProductList> {
                 ReceiptHelper()
                     .queryReceiptByBusiness(widget.businessId)
                     .then((value) {
-                  print("identify receipts overview");
+                  print(
+                      "identify receipts overview totalReceipts ${value.length}");
                   setState(() {
                     businessReceipts = value.map((e) {
-                      final products = ProductHelper()
-                          .queryReceiptProducts(e!.receiptNumber)
-                          .then((value) {
-                        print("hello");
-                        final receiptProducts = value.map((e) {
-                          return {
-                            "id": e!.id,
-                            "createdAt": e.createdAt,
-                            "updatedAt": e.updatedAt,
-                            "createdBy": e.createdBy,
-                            "updatedBy": e.updatedBy,
-                            "deleted": e.deleted,
-                            "active": e.active,
-                            "uuid": e.uuid,
-                            "amount": e.amount,
-                            "productName": e.productName
-                          };
-                        }).toList();
-                        print(
-                            "pruducts of ${e.receiptNumber} are $receiptProducts");
-                        return receiptProducts;
-                      });
-
+                      print("returned receipt ${e!.receiptNumber}");
                       return {
                         "id": e.id,
                         "createdAt": e.createdAt,
@@ -233,47 +210,30 @@ class _ProductListState extends State<ProductList> {
                           "imagePath": null,
                           "userType": loginUser!.userType
                         },
-                        "receiptProducts": [
-                          {
-                            "id": 46,
-                            "createdAt": "2023-09-11T11:12:49.453398",
-                            "updatedAt": "2023-09-11T11:12:49.453452",
-                            "createdBy": null,
-                            "updatedBy": null,
-                            "deleted": false,
-                            "active": true,
-                            "uuid": "38e5afb4-f323-4a95-80f0-959067b01e0c",
-                            "amount": 2000,
-                            "productName": "Maembe"
-                          },
-                          {
-                            "id": 47,
-                            "createdAt": "2023-09-11T11:12:49.553338",
-                            "updatedAt": "2023-09-11T11:12:49.553396",
-                            "createdBy": null,
-                            "updatedBy": null,
-                            "deleted": false,
-                            "active": true,
-                            "uuid": "28dd80b7-0bfe-41a6-a66b-c4643467b895",
-                            "amount": 2200,
-                            "productName": "Mandazi"
-                          }
-                        ]
+                        "receiptProducts": []
                       };
                     }).toList();
+                    // print("total returned ${businessReceipts.length}");
+                    businessReceipts.forEach((element) {
+                      taxAmount = element['tozo'] + taxAmount;
+                      totalAmount = element['amount'] + totalAmount;
+                    });
+                    totalReceipts = businessReceipts.length;
+                    receiptOverview = {
+                      "totalReceipts": totalReceipts,
+                      "taxAmount": taxAmount,
+                      "totalAmount": totalAmount,
+                      "receipts": businessReceipts
+                    };
                   });
                 });
               }
             } else {
               businessReceipts = state.receipts;
               totalReceipts = businessReceipts.length;
-
               businessReceipts.forEach((element) {
-                print("s 2");
                 taxAmount = element['tozo'] + taxAmount;
-                print("s kn");
                 totalAmount = element['amount'] + totalAmount;
-                print("s k");
               });
 
               receiptOverview = {
@@ -282,7 +242,7 @@ class _ProductListState extends State<ProductList> {
                 "totalAmount": totalAmount,
                 "receipts": businessReceipts
               };
-              Fluttertoast.showToast(msg: "Overview");
+              // Fluttertoast.showToast(msg: "Overview");
             }
           }
         },
@@ -369,20 +329,6 @@ class _ProductListState extends State<ProductList> {
   String businessName = "OMEGA - DAR";
   List<dynamic> ownerBusinesses = [];
   List<dynamic>? theProductList;
-  // Future<void> readJSON() async {
-  //   final String theFileWithJSONData = await rootBundle.rootBundle
-  //       .loadString('assets/jsonFiles/userRegisteredBusiness.json');
-  //   final capturedJSONData = await json.decode(theFileWithJSONData);
-  //   setState(() {
-  //     ownerBusinesses = capturedJSONData;
-  //   });
-  //   // theProductList = ownerBusinesses[widget.businessID]['businessProducts'];
-  //   theProductList = ownerBusinesses
-  //       .where((element) =>
-  //           element['businessName'].toString().contains(widget.businessName))
-  //       .toList();
-  //   theProductList = theProductList![0]['businessProducts'];
-  // }
 
   bool searching = false;
 
@@ -395,3 +341,31 @@ class _ProductListState extends State<ProductList> {
         .toList();
   }
 }
+
+
+
+
+    // {
+    //                         "id": 46,
+    //                         "createdAt": "2023-09-11T11:12:49.453398",
+    //                         "updatedAt": "2023-09-11T11:12:49.453452",
+    //                         "createdBy": null,
+    //                         "updatedBy": null,
+    //                         "deleted": false,
+    //                         "active": true,
+    //                         "uuid": "38e5afb4-f323-4a95-80f0-959067b01e0c",
+    //                         "amount": 2000,
+    //                         "productName": "Maembe"
+    //                       },
+    //                       {
+    //                         "id": 47,
+    //                         "createdAt": "2023-09-11T11:12:49.553338",
+    //                         "updatedAt": "2023-09-11T11:12:49.553396",
+    //                         "createdBy": null,
+    //                         "updatedBy": null,
+    //                         "deleted": false,
+    //                         "active": true,
+    //                         "uuid": "28dd80b7-0bfe-41a6-a66b-c4643467b895",
+    //                         "amount": 2200,
+    //                         "productName": "Mandazi"
+    //                       }

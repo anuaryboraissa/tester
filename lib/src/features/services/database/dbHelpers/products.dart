@@ -92,6 +92,7 @@ class ProductDbHelper {
   Future<List<Map<String, dynamic>>> queryBusinessProducts(
       String businessNumber) async {
     Database db = await instance.database;
+    // dropTable(db);
     return db.rawQuery(
         "SELECT * FROM $tableProduct WHERE $columnBusinessRegNumber=?",
         [businessNumber]);

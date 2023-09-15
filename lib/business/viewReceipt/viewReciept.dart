@@ -6,6 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
 import 'package:qr_flutter/qr_flutter.dart';
 
+import '../../src/features/services/database/modalHelpers/product_helper.dart';
+
 class ViewReciept extends StatefulWidget {
   const ViewReciept({super.key, required this.receiptGenerated});
   final Map receiptGenerated;
@@ -19,8 +21,40 @@ class _ViewRecieptState extends State<ViewReciept> {
   void initState() {
     super.initState();
     readJSON();
+    // getProducts();
     readUserInformation();
     readCustomerInformation();
+    if ((widget.receiptGenerated['receiptProducts'] as List).isEmpty) {
+      print("is Empty");
+      getProducts();
+    }
+  }
+
+  List<Map<String, dynamic>> receiptProducts = [];
+
+  getProducts() {
+    ProductHelper()
+        .queryReceiptProducts(widget.receiptGenerated['receiptNumber'])
+        .then((value) {
+      print("hello");
+      final receiptProducts = value.map((e) {
+        return {
+          "id": e!.id,
+          "createdAt": e.createdAt,
+          "updatedAt": e.updatedAt,
+          "createdBy": e.createdBy,
+          "updatedBy": e.updatedBy,
+          "deleted": e.deleted,
+          "active": e.active,
+          "uuid": e.uuid,
+          "amount": e.amount,
+          "productName": e.productName
+        };
+      }).toList();
+      setState(() {
+        this.receiptProducts = receiptProducts;
+      });
+    });
   }
 
   @override
@@ -119,15 +153,31 @@ class _ViewRecieptState extends State<ViewReciept> {
                               width: 2,
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            children: (widget
-                                        .receiptGenerated['receiptProducts']
-                                    as List)
+                            children: ((widget.receiptGenerated[
+                                            'receiptProducts'] as List)
+                                        .isEmpty
+                                    ? receiptProducts
+                                    : (widget
+                                            .receiptGenerated['receiptProducts']
+                                        as List))
                                 .map((e) => TableRow(children: [
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Column(
                                           children: [
-                                            Text(e['id'].toString()),
+                                            Text((widget.receiptGenerated[
+                                                            'receiptProducts']
+                                                        as List)
+                                                    .isEmpty
+                                                ? (receiptProducts.indexOf(e) +
+                                                        1)
+                                                    .toString()
+                                                : ((widget.receiptGenerated[
+                                                                    'receiptProducts']
+                                                                as List)
+                                                            .indexOf(e) +
+                                                        1)
+                                                    .toString()),
                                           ],
                                         ),
                                       ),

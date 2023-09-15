@@ -94,7 +94,7 @@ final class ClientProfile {
 }
 
 final class ReceiptItem {
-  final int id;
+  final int? id;
   final String createdAt;
   final String? updatedAt;
   final String? createdBy;
@@ -107,7 +107,7 @@ final class ReceiptItem {
   final String businessRegNumber;
 
   ReceiptItem(
-      {required this.id,
+      {this.id,
       required this.createdAt,
       required this.updatedAt,
       required this.createdBy,

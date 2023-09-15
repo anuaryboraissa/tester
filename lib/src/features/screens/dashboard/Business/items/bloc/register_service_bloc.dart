@@ -224,7 +224,7 @@ class RegisterServiceBloc
 
   void saveProducts(List result, String businessRegNumber) {
     for (Map<String, dynamic> item in (result)) {
-      print("amount ${item['price']} ..........................");
+      print("item id ${item['id']} ..........................");
       ProductHelper().queryById(item['id']).then((value) {
         if (value == null) {
           ReceiptItem receiptItem = ReceiptItem(
@@ -236,7 +236,8 @@ class RegisterServiceBloc
               uuid: item['uuid'],
               active: item['active'] ? 1 : 0,
               deleted: item['deleted'] ? 1 : 0,
-              amount: int.parse(item['price'].toString()) + 0.0,
+              amount:
+                  int.parse(item['amount'] ?? item['price'].toString()) + 0.0,
               businessRegNumber: item['businessProfile'] != null
                   ? item['businessProfile']['businessRegistrationNumber']
                   : businessRegNumber,

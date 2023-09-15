@@ -54,6 +54,11 @@ class ProductHelper {
   }
 
   ReceiptItem? fromMap(Map<String, dynamic>? map) {
+    print("from map active ${map![ProductDbHelper.columnProductActive]}");
+    print("from map amount ${map[ProductDbHelper.columnProductAmount]}");
+    print("from map reg ${map[ProductDbHelper.columnBusinessRegNumber]}");
+    print("from map created ${map[ProductDbHelper.columnProductCreatedAt]}");
+    print("from map id ${map[ProductDbHelper.columnProductId]}");
     return map == null
         ? null
         : ReceiptItem(

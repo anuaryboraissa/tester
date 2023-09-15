@@ -23,6 +23,12 @@ class ReceiptHelper {
     return reportMapList.map((e) => fromMap(e)).toList();
   }
 
+  Future<List<ReceiptModal?>> queryReceiptByTinNumber(String tinNumber) async {
+    List<Map<String, dynamic>> reportMapList =
+        await _dbHelper.queryReceiptsByTin(tinNumber);
+    return reportMapList.map((e) => fromMap(e)).toList();
+  }
+
   Future<int> delete(String receiptNumber) async {
     return _dbHelper.delete(receiptNumber);
   }

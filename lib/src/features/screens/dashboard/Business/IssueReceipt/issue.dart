@@ -178,7 +178,7 @@ class _IssueReceiptPageState extends State<IssueReceiptPage> {
 
                       setState(() {
                         itemAmount =
-                            "${int.parse(itemAmount.replaceAll("Tshs", "").replaceAll(" ", "").replaceAll(",", "")) * int.parse(quantity.isEmpty ? "1" : quantity)} Tshs";
+                            "${double.parse(itemAmount.replaceAll("Tshs", "").replaceAll(" ", "").replaceAll(",", "")) * double.parse(quantity.isEmpty ? "1" : quantity)} Tshs";
                       });
                     },
                     products: widget.products,

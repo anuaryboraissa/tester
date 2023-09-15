@@ -31,6 +31,20 @@ class ReceiptDbHelper {
   static const columnBusinessId = "businessId";
   static const columnClientId = "clientId";
 
+  static const tableClient = "client";
+  static const columnClientId2 = "id";
+  static const columnClientCreatedAt = "createdAt";
+  static const columnClientUpdatedAt = "updatedAt";
+  static const columnClientCreatedBy = "createdBy";
+  static const columnClientUpdatedBy = "updatedBy";
+  static const columnClientDeleted = "deleted";
+  static const columnClientFullName = "full_name";
+  static const columnClientUsername = "username";
+  static const columClientTinNumber = "tinNumber";
+  static const columnClientPhone = "phone";
+  static const columnClientUserType = "type";
+  static const columnClientUuid = "uuid";
+
   Database? _database;
 
   Future<Database> get database async {
@@ -70,6 +84,14 @@ class ReceiptDbHelper {
     Database db = await instance.database;
     return db.rawQuery(
         "SELECT * FROM $tableReceipt WHERE $columnBusinessId=?", [businessId]);
+  }
+
+  Future<List<Map<String, dynamic>>> queryReceiptsByTin(
+      String tinNumber) async {
+    Database db = await instance.database;
+    return db.rawQuery(
+        "SELECT * FROM $tableReceipt as r INNER JOIN $tableClient as c on r.$columnClientId=c.$columnClientId2 WHERE c.$columClientTinNumber=?",
+        [tinNumber]);
   }
 
   // Future<List<Map<String, dynamic>>> queryParticipants(int groupId) async {
@@ -159,6 +181,24 @@ class ReceiptDbHelper {
                 $columnReceiptVat DOUBLE NOT NULL
               )
            """);
+    tableCreate(Database db) async {
+      await db.execute("""
+            CREATE TABLE IF NOT EXISTS $tableClient(
+                $columnClientId2 INTEGER,
+                $columnClientCreatedAt TEXT NOT NULL,
+                $columnClientCreatedBy TEXT,
+                $columnClientFullName TEXT NOT NULL,
+                $columnClientDeleted INTEGER NOT NULL,
+                $columnClientPhone TEXT NOT NULL,
+                $columnClientUpdatedAt TEXT,
+                $columnClientUpdatedBy TEXT,
+                $columnClientUserType TEXT NOT NULL,
+                $columnClientUsername TEXT NOT NULL,
+                $columnClientUuid TEXT NOT NULL,
+                $columClientTinNumber TEXT PRIMARY KEY
+              )
+           """);
+    }
   }
 
   dropTable(Database db) async {
