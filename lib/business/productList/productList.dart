@@ -1,17 +1,9 @@
-import 'dart:convert';
 import 'package:erisiti/business/productList/widgets.dart/productWidget.dart';
 import 'package:erisiti/business/productList/widgets.dart/searchWidget.dart';
 import 'package:erisiti/src/features/screens/dashboard/Business/items/register.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/receipts/receipt.dart';
-import 'package:erisiti/src/features/services/database/modalHelpers/business_helper.dart';
-import 'package:erisiti/src/features/services/database/modalHelpers/login_user.dart';
-import 'package:erisiti/src/features/services/database/modalHelpers/product_helper.dart';
-import 'package:erisiti/src/features/services/database/modalHelpers/receipt_helper.dart';
-import 'package:erisiti/src/features/services/database/modals/login_user.dart';
-import 'package:erisiti/src/features/services/database/modals/receipt.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' as rootBundle;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -41,11 +33,7 @@ class _ProductListState extends State<ProductList> {
   void initState() {
     bloc.add(FindProductsByBusinessNumberEvent(widget.businessRegNumber));
     super.initState();
-    LoginUserHelper().queryById(1).then((value) {
-      setState(() {
-        loginUser = value;
-      });
-    });
+    // readJSON();
   }
 
   String query = "";
@@ -59,8 +47,6 @@ class _ProductListState extends State<ProductList> {
   double totalAmount = 0.0;
 
   Map receiptOverview = {};
-
-  LoginUser? loginUser;
 
   @override
   Widget build(BuildContext context) {
@@ -144,96 +130,20 @@ class _ProductListState extends State<ProductList> {
         listener: (context, state) {
           if (state is FindProductsByBusinessNumberState) {
             theProductList = state.items;
-            print("state message ${state.message}");
-            if (state.message == "Network is unreachable") {
-              print("entered...........");
-              ProductHelper()
-                  .queryBusinessItems(widget.businessRegNumber)
-                  .then((value) {
-                print("data ${value.length}");
-                setState(() {
-                  theProductList = value.map((e) {
-                    print("mapped...........");
-                    // await Future.delayed(const Duration(milliseconds: 5));
-                    return {
-                      "id": e!.id,
-                      "createdAt": e.createdAt,
-                      "updatedAt": e.updatedAt,
-                      "createdBy": e.createdBy,
-                      "updatedBy": e.updatedBy,
-                      "deleted": e.deleted,
-                      "active": e.active,
-                      "uuid": e.uuid,
-                      "businessProfile": widget.businessMap,
-                      "productName": e.productName,
-                      "price": e.amount,
-                      "quantity": 1,
-                      "quantityTypeRealNumber": false,
-                      "unit": "Item"
-                    };
-                  }).toList();
-                });
-              });
-            }
             bloc.add(FindBusinessReceiptsByBusinessIdEvent(widget.businessId));
           } else if (state is FindBusinessReceiptsByBusinessIdState) {
             if (state.error) {
               Fluttertoast.showToast(msg: state.message);
-              if (state.message == "Network is unreachable") {
-                ReceiptHelper()
-                    .queryReceiptByBusiness(widget.businessId)
-                    .then((value) {
-                  print(
-                      "identify receipts overview totalReceipts ${value.length}");
-                  setState(() {
-                    businessReceipts = value.map((e) {
-                      print("returned receipt ${e!.receiptNumber}");
-                      return {
-                        "id": e.id,
-                        "createdAt": e.createdAt,
-                        "updatedAt": e.updatedAt,
-                        "createdBy": e.createdAt,
-                        "updatedBy": e.updatedBy,
-                        "deleted": e.deleted,
-                        "active": e.deleted,
-                        "uuid": e.uuid,
-                        "receiptNumber": e.receiptNumber,
-                        "amount": e.amount,
-                        "vat": e.vat,
-                        "tozo": e.tozo,
-                        "businessProfile": widget.businessMap,
-                        "client": {
-                          "fullName": loginUser!.fullName,
-                          "username": loginUser!.fullName.split(" ")[0],
-                          "tinNo": loginUser!.tinNumber,
-                          "phone": loginUser!.phoneNumber,
-                          "imagePath": null,
-                          "userType": loginUser!.userType
-                        },
-                        "receiptProducts": []
-                      };
-                    }).toList();
-                    // print("total returned ${businessReceipts.length}");
-                    businessReceipts.forEach((element) {
-                      taxAmount = element['tozo'] + taxAmount;
-                      totalAmount = element['amount'] + totalAmount;
-                    });
-                    totalReceipts = businessReceipts.length;
-                    receiptOverview = {
-                      "totalReceipts": totalReceipts,
-                      "taxAmount": taxAmount,
-                      "totalAmount": totalAmount,
-                      "receipts": businessReceipts
-                    };
-                  });
-                });
-              }
             } else {
               businessReceipts = state.receipts;
               totalReceipts = businessReceipts.length;
+
               businessReceipts.forEach((element) {
+                print("s 2");
                 taxAmount = element['tozo'] + taxAmount;
+                print("s kn");
                 totalAmount = element['amount'] + totalAmount;
+                print("s k");
               });
 
               receiptOverview = {
@@ -242,7 +152,7 @@ class _ProductListState extends State<ProductList> {
                 "totalAmount": totalAmount,
                 "receipts": businessReceipts
               };
-              // Fluttertoast.showToast(msg: "Overview");
+              Fluttertoast.showToast(msg: "Overview");
             }
           }
         },
@@ -341,31 +251,3 @@ class _ProductListState extends State<ProductList> {
         .toList();
   }
 }
-
-
-
-
-    // {
-    //                         "id": 46,
-    //                         "createdAt": "2023-09-11T11:12:49.453398",
-    //                         "updatedAt": "2023-09-11T11:12:49.453452",
-    //                         "createdBy": null,
-    //                         "updatedBy": null,
-    //                         "deleted": false,
-    //                         "active": true,
-    //                         "uuid": "38e5afb4-f323-4a95-80f0-959067b01e0c",
-    //                         "amount": 2000,
-    //                         "productName": "Maembe"
-    //                       },
-    //                       {
-    //                         "id": 47,
-    //                         "createdAt": "2023-09-11T11:12:49.553338",
-    //                         "updatedAt": "2023-09-11T11:12:49.553396",
-    //                         "createdBy": null,
-    //                         "updatedBy": null,
-    //                         "deleted": false,
-    //                         "active": true,
-    //                         "uuid": "28dd80b7-0bfe-41a6-a66b-c4643467b895",
-    //                         "amount": 2200,
-    //                         "productName": "Mandazi"
-    //                       }

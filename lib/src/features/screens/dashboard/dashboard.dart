@@ -2,7 +2,6 @@ import 'package:erisiti/src/features/screens/dashboard/features/bottombar.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/home/home.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/more/more.dart';
 import 'package:erisiti/src/features/screens/dashboard/features/tips/home.dart';
-import 'package:erisiti/test.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../business/businessList/BusinessList.dart';

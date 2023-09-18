@@ -4,9 +4,8 @@ import 'package:erisiti/business/viewReceipt/horizontalLine.dart';
 import 'package:erisiti/business/viewReceipt/rowMaker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' as rootBundle;
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:qr_flutter/qr_flutter.dart';
-
-import '../../src/features/services/database/modalHelpers/product_helper.dart';
 
 class ViewReciept extends StatefulWidget {
   const ViewReciept({super.key, required this.receiptGenerated});
@@ -17,223 +16,207 @@ class ViewReciept extends StatefulWidget {
 }
 
 class _ViewRecieptState extends State<ViewReciept> {
+  bool isVisible = false;
   @override
   void initState() {
     super.initState();
     readJSON();
-    // getProducts();
     readUserInformation();
     readCustomerInformation();
-    if ((widget.receiptGenerated['receiptProducts'] as List).isEmpty) {
-      print("is Empty");
-      getProducts();
-    }
-  }
-
-  List<Map<String, dynamic>> receiptProducts = [];
-
-  getProducts() {
-    ProductHelper()
-        .queryReceiptProducts(widget.receiptGenerated['receiptNumber'])
-        .then((value) {
-      print("hello");
-      final receiptProducts = value.map((e) {
-        return {
-          "id": e!.id,
-          "createdAt": e.createdAt,
-          "updatedAt": e.updatedAt,
-          "createdBy": e.createdBy,
-          "updatedBy": e.updatedBy,
-          "deleted": e.deleted,
-          "active": e.active,
-          "uuid": e.uuid,
-          "amount": e.amount,
-          "productName": e.productName
-        };
-      }).toList();
-      setState(() {
-        this.receiptProducts = receiptProducts;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-        itemCount: 1,
-        itemBuilder: (context, index) {
-          return businessesInformation.isEmpty
-              ? const Center(
-                  child: CircularProgressIndicator(),
-                )
-              : Container(
-                  margin: const EdgeInsets.all(21),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Text("*** START OF LEGAL RECEIPT ***"),
-                      Text(widget.receiptGenerated['businessProfile']
-                              ['businessName']
-                          .toString()
-                          .toUpperCase()),
-                      Text(
-                          "${widget.receiptGenerated['businessProfile']['region']}-${widget.receiptGenerated['businessProfile']['district']}"
+      body: GestureDetector(
+        onTap: () {
+          setState(() {
+            isVisible = !isVisible;
+          });
+        },
+        child: InteractiveViewer(
+          child: ListView.builder(
+            itemCount: 1,
+            itemBuilder: (context, index) {
+              return businessesInformation.isEmpty
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Container(
+                      margin: const EdgeInsets.all(21),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Text("*** START OF LEGAL RECEIPT ***"),
+                          Text(widget.receiptGenerated['businessProfile']
+                                  ['businessName']
                               .toString()
                               .toUpperCase()),
-                      Text(widget.receiptGenerated['businessProfile']['region']
-                          .toString()
-                          .toUpperCase()),
-                      Text(businessesInformation[index]['businessPhone']
-                          .toString()),
-                      Text(businessesInformation[index]['businessEmail']
-                          .toString()),
-                      Text(
-                        widget.receiptGenerated['businessProfile']['tinNo']
-                            .toString(),
-                        style: const TextStyle(
-                            color: Colors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                          userInformation[index]['userVRN'].toString() == "null"
+                          Text(
+                              "${widget.receiptGenerated['businessProfile']['region']}-${widget.receiptGenerated['businessProfile']['district']}"
+                                  .toString()
+                                  .toUpperCase()),
+                          Text(widget.receiptGenerated['businessProfile']
+                                  ['region']
+                              .toString()
+                              .toUpperCase()),
+                          Text(businessesInformation[index]['businessPhone']
+                              .toString()),
+                          Text(businessesInformation[index]['businessEmail']
+                              .toString()),
+                          Text(
+                            widget.receiptGenerated['businessProfile']['tinNo']
+                                .toString(),
+                            style: const TextStyle(
+                                color: Colors.black,
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold),
+                          ),
+                          Text(userInformation[index]['userVRN'].toString() ==
+                                  "null"
                               ? "VRN *NOT REGISTERED*"
                               : userInformation[index]['userVRN'].toString()),
-                      const HorizontalLine(),
-                      RowMaker(
-                          JSONKey: "Customer's Name",
-                          JSONValue: widget.receiptGenerated['client']
-                                  ['fullName']
-                              .toString()),
-                      RowMaker(
-                          JSONKey: "Customer's Phone",
-                          JSONValue: widget.receiptGenerated['client']['phone']
-                              .toString()),
-                      RowMaker(
-                          JSONKey: "Customer's TIN",
-                          JSONValue: widget.receiptGenerated['client']['tinNo']
-                              .toString()),
-                      const HorizontalLine(),
-                      RowMaker(
-                          JSONKey: "Receipt Date",
-                          JSONValue: widget.receiptGenerated['createdAt']
-                              .toString()
-                              .replaceRange(
-                                  widget.receiptGenerated['createdAt']
-                                      .toString()
-                                      .indexOf("T"),
-                                  widget.receiptGenerated['createdAt']
-                                      .toString()
-                                      .length,
-                                  "")),
-                      RowMaker(
-                          JSONKey: "Receipt Time",
-                          JSONValue: widget.receiptGenerated['createdAt']
-                              .toString()
-                              .replaceRange(
-                                  0,
-                                  widget.receiptGenerated['createdAt']
+                          const HorizontalLine(),
+                          RowMaker(
+                              JSONKey: "Customer's Name",
+                              JSONValue: widget.receiptGenerated['client']
+                                      ['fullName']
+                                  .toString()),
+                          RowMaker(
+                              JSONKey: "Customer's Phone",
+                              JSONValue: widget.receiptGenerated['client']
+                                      ['phone']
+                                  .toString()),
+                          RowMaker(
+                              JSONKey: "Customer's TIN",
+                              JSONValue: widget.receiptGenerated['client']
+                                      ['tinNo']
+                                  .toString()),
+                          const HorizontalLine(),
+                          RowMaker(
+                              JSONKey: "Receipt Date",
+                              JSONValue: widget.receiptGenerated['createdAt']
+                                  .toString()
+                                  .replaceRange(
+                                      widget.receiptGenerated['createdAt']
                                           .toString()
-                                          .indexOf("T") +
-                                      1,
-                                  "")),
-                      const HorizontalLine(),
-                      const Padding(
-                        padding: EdgeInsets.all(8),
-                        child: Text("Items"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 8.0, right: 8),
-                        child: Table(
-                            // defaultColumnWidth: const FixedColumnWidth(120.0),
-                            border: TableBorder.all(
-                              color: Colors.black,
-                              style: BorderStyle.solid,
-                              width: 2,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            children: ((widget.receiptGenerated[
-                                            'receiptProducts'] as List)
-                                        .isEmpty
-                                    ? receiptProducts
-                                    : (widget
+                                          .indexOf("T"),
+                                      widget.receiptGenerated['createdAt']
+                                          .toString()
+                                          .length,
+                                      "")),
+                          RowMaker(
+                              JSONKey: "Receipt Time",
+                              JSONValue: widget.receiptGenerated['createdAt']
+                                  .toString()
+                                  .replaceRange(
+                                      0,
+                                      widget.receiptGenerated['createdAt']
+                                              .toString()
+                                              .indexOf("T") +
+                                          1,
+                                      "")),
+                          const HorizontalLine(),
+                          const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text("Items"),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 8.0, right: 8),
+                            child: Table(
+                                // defaultColumnWidth: const FixedColumnWidth(120.0),
+                                border: TableBorder.all(
+                                  color: const Color(0xFF0081A0),
+                                  style: BorderStyle.solid,
+                                  width: 2,
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                children: (widget
                                             .receiptGenerated['receiptProducts']
-                                        as List))
-                                .map((e) => TableRow(children: [
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          children: [
-                                            Text((widget.receiptGenerated[
-                                                            'receiptProducts']
-                                                        as List)
-                                                    .isEmpty
-                                                ? (receiptProducts.indexOf(e) +
-                                                        1)
-                                                    .toString()
-                                                : ((widget.receiptGenerated[
-                                                                    'receiptProducts']
-                                                                as List)
-                                                            .indexOf(e) +
-                                                        1)
+                                        as List)
+                                    .map((e) => TableRow(children: [
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              children: [
+                                                Text(e['id'].toString()),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              children: [
+                                                Text(e['productName']
                                                     .toString()),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          children: [
-                                            Text(e['productName'].toString()),
-                                          ],
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Column(
-                                          children: [
-                                            Text(e['amount'].toString()),
-                                          ],
-                                        ),
-                                      ),
-                                    ]))
-                                .toList()),
+                                              ],
+                                            ),
+                                          ),
+                                          Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              children: [
+                                                Text(e['amount'].toString()),
+                                              ],
+                                            ),
+                                          ),
+                                        ]))
+                                    .toList()),
+                          ),
+                          const HorizontalLine(),
+                          RowMaker(
+                              JSONKey: "Total Amount TAX excluded",
+                              JSONValue: ((widget.receiptGenerated['amount']) +
+                                      (widget.receiptGenerated['tozo']) +
+                                      (widget.receiptGenerated['vat']))
+                                  .toString()),
+                          RowMaker(JSONKey: "Discount", JSONValue: "0"),
+                          const HorizontalLine(),
+                          RowMaker(
+                              JSONKey: "Total TAX",
+                              JSONValue:
+                                  widget.receiptGenerated['tozo'].toString()),
+                          RowMaker(
+                              JSONKey: "Total Amount TAX included",
+                              JSONValue:
+                                  widget.receiptGenerated['amount'].toString()),
+                          const HorizontalLine(),
+                          RowMaker(
+                              JSONKey: "RECEIPT VERIFICATION CODE",
+                              JSONValue: "HDSRGZ"),
+                          QrImageView(
+                            data: widget.receiptGenerated['receiptNumber'],
+                            eyeStyle: const QrEyeStyle(
+                                color: Color(0xFF0081A0),
+                                eyeShape: QrEyeShape.square),
+                            size: 120,
+                          ),
+                          const Text("*** END OF LEGAL RECEIPT ***"),
+                        ],
                       ),
-                      const HorizontalLine(),
-                      RowMaker(
-                          JSONKey: "Total Amount TAX excluded",
-                          JSONValue: ((widget.receiptGenerated['amount']) +
-                                  (widget.receiptGenerated['tozo']) +
-                                  (widget.receiptGenerated['vat']))
-                              .toString()),
-                      RowMaker(JSONKey: "Discount", JSONValue: "0"),
-                      const HorizontalLine(),
-                      RowMaker(
-                          JSONKey: "Total TAX",
-                          JSONValue:
-                              widget.receiptGenerated['tozo'].toString()),
-                      RowMaker(
-                          JSONKey: "Total Amount TAX included",
-                          JSONValue:
-                              widget.receiptGenerated['amount'].toString()),
-                      const HorizontalLine(),
-                      RowMaker(
-                          JSONKey: "RECEIPT VERIFICATION CODE",
-                          JSONValue: "HDSRGZ"),
-                      QrImageView(
-                        data: widget.receiptGenerated['receiptNumber'],
-                        eyeStyle: const QrEyeStyle(
-                            color: Color(0xFF0081A0),
-                            eyeShape: QrEyeShape.square),
-                        size: 70,
-                      ),
-                      const Text("*** END OF LEGAL RECEIPT ***"),
-                    ],
-                  ),
-                );
-        },
+                    );
+            },
+          ),
+        ),
       ),
+      floatingActionButton: isVisible
+          ? SpeedDial(
+              icon: Icons.picture_as_pdf,
+              backgroundColor: const Color(0xFF0081A0),
+              children: [
+                SpeedDialChild(
+                  label: 'Download as PDF',
+                  child: const Icon(Icons.download),
+                  onTap: () {},
+                ),
+                SpeedDialChild(
+                  label: 'Share as PDF',
+                  child: const Icon(Icons.share),
+                  onTap: () {},
+                ),
+              ],
+            )
+          : null,
     );
   }
 
