@@ -36,7 +36,7 @@ class _HomeBodyState extends State<HomeBody> {
         offlineLoaded = true;
         value.forEach((element) {
           print("tozo is ${element!.tozo} amount ${element.amount}");
-          taxAmount = (element!.tozo + taxAmount);
+          taxAmount = (element.tozo + taxAmount);
           totalAmount = (element.amount + totalAmount);
         });
       });
@@ -49,15 +49,13 @@ class _HomeBodyState extends State<HomeBody> {
       bloc: widget.homeBloc,
       listener: (context, state) {
         if (state is FindUserReceiptByTinState) {
-          
           if (state.error && state.message.contains("Network is unreachable")) {
             // print("Network mzeee");
             findOfflineReceipts();
-          }
-          else{
+          } else {
             numberOfReceipts = state.receipts['totalReceipts'].toString();
-          totalAmount = state.receipts['totalAmount'];
-          taxAmount = state.receipts['taxAmount'];
+            totalAmount = state.receipts['totalAmount'];
+            taxAmount = state.receipts['taxAmount'];
           }
         }
       },
