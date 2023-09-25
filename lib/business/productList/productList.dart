@@ -139,11 +139,8 @@ class _ProductListState extends State<ProductList> {
               totalReceipts = businessReceipts.length;
 
               businessReceipts.forEach((element) {
-                print("s 2");
                 taxAmount = element['tozo'] + taxAmount;
-                print("s kn");
                 totalAmount = element['amount'] + totalAmount;
-                print("s k");
               });
 
               receiptOverview = {
